@@ -1,0 +1,6 @@
+"Admission No","Admission Date","First Name","Middle Name","Last Name",Gender,"Date Of Birth",Course,Batch,Email,"Parent First Name","Parent Last Name",Relation,"Parent Email"
+1,2014-10-10,Test,Update,Updated,Female,2011-12-08,Mechanical,2014,student@gmail.com,Father,Updated,Father,parent@gmail.com
+29,2014-11-10,Student,,Name,Female,2014-10-29,"Information Technology",Civil,student@gmail.com,Parent,Name,Father,employee@gail.com
+30,2014-11-04,First,Middle,Name,Male,2014-11-06,"Information Technology",Civil,archana.jiwaji@yahoo.co.in,Parent,Last,Father,parent@gmail.com
+31,2014-11-05,Test,test,test,Male,2014-10-27,"Information Technology",Civil,student@gmail.com,Parent,Last," Name",parent@gmail.com
+33,2014-11-10,Student,Middle,Last,Male,2014-10-28,"Information Technology",Civila,student@gmail.com,Parent,Last," Name",parent@gmail.com
