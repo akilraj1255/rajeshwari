@@ -126,7 +126,8 @@ class SmsSettings extends CActiveRecord
 			// $method="GET";
 			//---------------------------------
 
-			$uid="686172695f313233";
+			//$uid="686172695f313233";
+			$uid="dummy";
 			$pin="54cc7d3454d6d";
 			$route="10";
 			// $domain="www.bulksmsgateway.in";
