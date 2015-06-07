@@ -64,6 +64,12 @@ $this->breadcrumbs=array(
 			$exm_name = $group->name;
 			$sub=Subjects::model()->findByAttributes(array('id'=>$exm->subject_id));
 			$sub_name = $sub->name ;
+			if($sub->elective_group_id != "0")
+			 {
+			 $ele = StudentElectives::model()->findByAttributes(array('student_id'=>$_REQUEST['id'],'batch_id'=>$sub->batch_id,'elective_group_id'=>$sub->elective_group_id,'status'=>'1'));
+			 $elename = Electives::model()->findByAttributes(array('id'=>$ele->elective_id));
+			 $sub_name .= "(". @$elename->name .")";
+			 }
 			$totals[$exm_name] += $exams->marks;
 			if($group->exam_type == 'Marks') {  
 				  $arr[$sub_name] [$exm_name] = $exams->marks;  } 
@@ -126,8 +132,8 @@ $this->breadcrumbs=array(
 
 		foreach ($arr as $sub => $subs) {
 			echo '<tr><th>Exams:</th>';
-			foreach($subs as $exam_name => $valu)
-			{
+			foreach($subs as $exam_name => $valu) {
+
 				echo '<th>'. $exam_name. '</th>';
 			}
 			echo '</tr>';
