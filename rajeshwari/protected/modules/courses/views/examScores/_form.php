@@ -70,6 +70,7 @@ if(isset($_REQUEST['id']))
               
               <tr>
               <th><?php echo Yii::t('examination','Student Name');?></th>
+              <th><?php echo Yii::t('Examscore','Subject');?></th>
               <th><?php echo Yii::t('examination','Marks');?></th>
               <th><?php echo Yii::t('examination','Remarks');?></th>
             
@@ -101,7 +102,19 @@ if(isset($_REQUEST['id']))
 		
 		<?php echo $form->hiddenField($model,'student_id[]',array('value'=>$posts_1->id,'id'=>$posts_1->id)); ?></td>
 		
-
+	        <td><?php 
+        echo $sub->name; 
+	        			if($sub->elective_group_id != "0")
+			 {
+			 $ele = StudentElectives::model()->findByAttributes(array('student_id'=>$posts_1->id,'batch_id'=>$sub->batch_id,'elective_group_id'=>$sub->elective_group_id,'status'=>'1'));
+			 $elename = Electives::model()->findByAttributes(array('id'=>$ele->elective_id));
+			 $sub_name = "(". @$elename->name .")";
+			 echo $sub_name;
+			 }
+			 
+	        
+	        ?></td>
+	        
 	
 		<td><?php echo $form->textField($model,'marks[]',array('size'=>7,'maxlength'=>3,'id'=>$posts_1->id,'onclick'=>'alertmessage()')); ?></td>
         
