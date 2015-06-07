@@ -131,7 +131,15 @@ $(document).ready(function() {
 <div class="overview">
 	<div class="overviewbox ovbox1">
     	<h1><?php echo Yii::t('students','<strong>Total Students</strong>');?></h1>
-  <?php  $tot =   Students::model()->countByAttributes(array('is_active'=> 1,'is_deleted'=>0)); ?>
+  <!--<?php /* $tot =   Students::model()->countByAttributes(array('is_active'=> 1,'is_deleted'=>0));*/ ?>-->
+  <?php $tot =  Students::model()->count(array(
+    'condition' => 'is_deleted=:is_deleted',
+    'select' => 'count(distinct admission_no)',
+    'distinct' => true,
+    'params' => array(
+        ":is_deleted" => 0
+    ),
+        )) ; ?>
        <div class="ovrBtm"><?php echo $tot ?></div>
     </div>
     <div class="overviewbox ovbox2">
