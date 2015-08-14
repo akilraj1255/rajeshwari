@@ -14,8 +14,10 @@ if($mode == 1)
 			$weekdays = Weekdays::model()->findAll("batch_id IS NULL");
 		}
 		
-		
-        $timing = ClassTimings::model()->findAll("batch_id=:x", array(':x'=>$batch_id)); // Selecting class timings of the batch
+		$criteria = new CDbCriteria(array("order"=>"STR_TO_DATE(start_time,'%h:%i%p') ASC"));
+		$criteria->addCondition('batch_id=:x');
+		$criteria->params = array(':x' => $batch_id);
+        $timing = ClassTimings::model()->findAll( $criteria); // Selecting class timings of the batch
 		$count_timing = count($timing);
         if($timing!=NULL) // If class timing is set for the batch
         {
@@ -64,6 +66,7 @@ if($mode == 1)
                                         <div class="tt-subject" style="width:120px; margin:0 auto;">
                                             <div class="subject">
                                             <?php
+                                            
                                             $set =  TimetableEntries::model()->findByAttributes(array('batch_id'=>$batch_id,'weekday_id'=>$weekdays[0]['weekday'],'class_timing_id'=>$timing[$i]['id'])); 			
                                             if($set != NULL)
                                             {	
@@ -115,6 +118,7 @@ if($mode == 1)
                                         <div class="tt-subject" style="width:120px; margin:0 auto;">
                                             <div class="subject">
                                             <?php
+                                    
                                             $set =  TimetableEntries::model()->findByAttributes(array('batch_id'=>$batch_id,'weekday_id'=>$weekdays[1]['weekday'],'class_timing_id'=>$timing[$i]['id'])); 			
                                             if($set != NULL)
                                             {	
@@ -438,7 +442,11 @@ elseif($mode == 2)
 		}*/
 
 		
-        $timing = ClassTimings::model()->findAll("batch_id=:x", array(':x'=>$batch_id)); // Selecting class timings of the batch
+       	$criteria = new CDbCriteria(array("order"=>"STR_TO_DATE(start_time,'%h:%i%p') ASC"));
+		$criteria->addCondition('batch_id=:x');
+		$criteria->params = array(':x' => $batch_id);
+        $timing = ClassTimings::model()->findAll( $criteria);
+
 		$count_timing = count($timing);
         if($timing!=NULL) // If class timing is set for the batch
         {
