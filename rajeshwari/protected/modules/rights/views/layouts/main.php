@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/rights_style.css" />
 
 <?php 
-if(Yii::app()->user->id == NULL){
+if(Yii::app()->user->id != NULL){
 $this->beginContent(Rights::module()->appLayout); ?>
 
 		<?php if( $this->id!=='install' ): ?>
