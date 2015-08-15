@@ -124,7 +124,7 @@ if(count($particular)!=0)
 					foreach($check_admission_no as $adm_no){
 						$adm_amount = $adm_amount + $adm_no->amount;
 					}
-					echo $adm_amount.' '.$currency->config_value;	
+					echo $currency->config_value.' '.$adm_amount;	
 				}
 				else{ // If any particular is present for this student category
 					$check_student_category = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>$posts->student_category_id,'admission_no'=>''));
@@ -142,7 +142,7 @@ if(count($particular)!=0)
 							foreach($check_all as $all){
 								$all_amount = $all_amount + $all->amount;
 							}
-							echo $all_amount.' '.$currency->config_value;
+							echo $currency->config_value.' '.$all_amount;
 						}
 						else{
 							echo '-'; // If no particular is found.

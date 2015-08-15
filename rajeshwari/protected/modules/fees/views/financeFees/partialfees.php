@@ -103,7 +103,7 @@ $id = $model->id;
 							}
 						}
 					if($fees)	
-						echo $fees.' '.$currency->config_value;
+						echo $currency->config_value.' '.$fees;
 					else
 						echo '-';				
 					?>
@@ -112,7 +112,7 @@ $id = $model->id;
                     	<?php echo Yii::t('fees','Fees Paid :'); ?>
                     </td>
                     <td align="left">
-                    	<?php echo $model->fees_paid.' '.$currency->config_value;?>
+                    	<?php echo $currency->config_value.' '.$model->fees_paid;?>
                     </td>
                 </tr>
                 <tr>
@@ -132,7 +132,7 @@ $id = $model->id;
 						echo '<td  align="left">';
 					}
 					?>                    	
-					<?php echo $balance.' '.$currency->config_value;?>
+					<?php echo $currency->config_value.' '.$balance;?>
                     </td>
                 </tr>
                 

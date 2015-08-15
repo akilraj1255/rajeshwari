@@ -192,7 +192,7 @@ echo '<br/><br/>';
 						}
 					}
 				if($fees)	
-					echo $fees.' '.$currency->config_value;
+					echo $currency->config_value.' '.$fees;
 				else
 					echo '-';				
 				?>
@@ -201,11 +201,11 @@ echo '<br/><br/>';
              	<?php
 				if($list_1->is_paid == 0)
 			 	{
-					echo $list_1->fees_paid.' '.$currency->config_value;
+					echo $currency->config_value.' '.$list_1->fees_paid;
 				}
 				else
 				{
-					echo $fees.' '.$currency->config_value; 
+					echo $currency->config_value.' '.$fees; 
 				}
 				?>
              </td>
@@ -224,7 +224,7 @@ echo '<br/><br/>';
 				}
 				if($list_1->is_paid == 0)
 			 	{	
-             		echo $balance.' '.$currency->config_value;
+             		echo $currency->config_value.' '.$balance;
 				}
 				else
 				{

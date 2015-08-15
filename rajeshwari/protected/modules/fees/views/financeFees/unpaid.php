@@ -144,7 +144,7 @@ if(count($particular)!=0)
 				}
 			?>
 		</td>
-          <td><?php echo $particular_1->amount.' '.$currency->config_value; ?></td>
+          <td><?php echo $currency->config_value.' '.$particular_1->amount; ?></td>
         </tr>
         <?php  /*$amount = $amount + $particular_1->amount;*/ $i++;} ?>
         <?php /*?><tr>
@@ -246,7 +246,7 @@ if(count($particular)!=0)
                     }
                 }
             if($fees)	
-                echo $fees.' '.$currency->config_value;
+                echo $currency->config_value.' '.$fees;
             else
                 echo '-';				
             ?>
@@ -255,11 +255,11 @@ if(count($particular)!=0)
 			<?php
             if($list_1->is_paid == 0)
             {
-                echo $list_1->fees_paid.' '.$currency->config_value;
+                echo $currency->config_value.' '.$list_1->fees_paid;
             }
             else
             {
-                echo $fees.' '.$currency->config_value; 
+                echo $currency->config_value.' '.$fees; 
             }
             ?>
          </td>
@@ -279,7 +279,7 @@ if(count($particular)!=0)
            
             if($list_1->is_paid == 0)
             {	
-                echo $balance.' '.$currency->config_value;
+                echo $currency->config_value.' '.$balance;
             }
             else
             {

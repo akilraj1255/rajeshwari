@@ -240,7 +240,7 @@ $this->breadcrumbs=array(
                     }
                 }
             if($fees)	
-                echo $fees.' '.$currency->config_value;
+                echo $currency->config_value.' '.$fees;
             else
                 echo '-';
 				
@@ -249,11 +249,11 @@ $this->breadcrumbs=array(
 			
             if($list_1->is_paid == 0)
             {
-                echo $list_1->fees_paid.' '.$currency->config_value;
+                echo $currency->config_value.' '.$list_1->fees_paid;
             }
             else
             {
-                echo $fees.' '.$currency->config_value; 
+                echo $currency->config_value.' '.$fees; 
             }
             
          	echo "</td>";
@@ -267,7 +267,7 @@ $this->breadcrumbs=array(
 			}
             if($list_1->is_paid == 0)
             {	
-                echo $balance.' '.$currency->config_value;
+                echo $currency->config_value.' '.$balance;
             }
             else
             {
