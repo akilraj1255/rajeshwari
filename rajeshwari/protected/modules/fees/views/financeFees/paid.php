@@ -133,7 +133,7 @@ if(count($particular)!=0)
 						foreach($check_student_category as $stu_cat){
 							$cat_amount = $cat_amount + $stu_cat->amount;
 						}
-						echo $cat_amount.' '.$currency->config_value;		
+						echo $currency->config_value.' '.$cat_amount;		
 					}
 					else{ //If no particular is present for this student or student category
 						$check_all = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>NULL,'admission_no'=>''));

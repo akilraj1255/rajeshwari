@@ -153,7 +153,7 @@ $this->breadcrumbs=array(
                     }
                     ?>
                     </td>
-                    <td><?php echo $particular->amount.' '.$currency->config_value; ?></td>
+                    <td><?php echo $currency->config_value.' '.$particular->amount; ?></td>
                 </tr>
             <?php  
 			$i++;} 

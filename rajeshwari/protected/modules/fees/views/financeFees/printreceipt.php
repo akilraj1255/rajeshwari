@@ -204,7 +204,7 @@
             	<tr>
                     <td style="border-left:#cad4dc 1px solid;"><?php echo $i; ?></td>
                     <td><?php echo $particular->name; ?></td>
-                    <td><?php echo number_format($particular->amount,2).' '.$currency->config_value; ?></td>
+                    <td><?php echo $currency->config_value.' '.number_format($particular->amount,2); ?></td>
             	</tr>
 			<?php
 				$amount = $amount + $particular->amount;
@@ -216,7 +216,7 @@
             <tr>
                 <td style="border-left:#cad4dc 1px solid;">&nbsp;</td>
                 <td style="color:#333333; font-size:16px; text-align:right; background:#e4eaed;"><strong><?php echo Yii::t('fees','Grand Total'); ?></strong></td>
-                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo number_format($amount,2).' '.$currency->config_value;?> </td>
+                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo $currency->config_value.' '.number_format($amount,2);?> </td>
             </tr>
         </table>
     </div>

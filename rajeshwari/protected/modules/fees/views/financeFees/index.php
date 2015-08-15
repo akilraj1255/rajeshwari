@@ -117,7 +117,8 @@ echo '<br/><br/>';
 					}
 				?>
 			</td>
-			  <td><?php echo $particular_1->amount.' '.$currency->config_value; ?></td>
+			  <td><?php echo $currency->config_value.' '.$particular_1->amount; ?></td>
+			  
 			</tr>
 			<?php  /*$amount = $amount + $particular_1->amount;*/$i++;} ?>
 			<?php /*?><tr>

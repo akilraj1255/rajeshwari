@@ -154,12 +154,12 @@
             <tr>
                 <td style="border-left:#cad4dc 1px solid;">&nbsp;</td>
                 <td style="color:#333333; font-size:16px; text-align:right; background:#e4eaed;"><strong><?php echo Yii::t('fees','Grand Total'); ?></strong></td>
-                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo number_format($finance_f->fees_paid,2).' '.$currency->config_value;?> </td>
+                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo $currency->config_value.' '.number_format($finance_f->fees_paid,2);?> </td>
             </tr>
             <tr>
                 <td style="border-left:#cad4dc 1px solid;">&nbsp;</td>
                 <td style="color:#333333; font-size:16px; text-align:right; background:#e4eaed;"><strong><?php echo Yii::t('fees','Balance'); ?></strong></td>
-                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo number_format($_REQUEST['balance'],2).' '.$currency->config_value;?> </td>
+                <td style="color:#333333; font-size:16px; background:#e4eaed;"><?php echo $currency->config_value.' '.number_format($_REQUEST['balance'],2);?> </td>
             </tr>
         </table>
     </div>
