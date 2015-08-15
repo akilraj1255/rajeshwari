@@ -61,7 +61,10 @@ window.location = "index.php?r=weekdays/timetable&id="+id;
 		}*/
 	?>&nbsp;
     
-    <?php $timing = ClassTimings::model()->findAll("batch_id=:x", array(':x'=>$_REQUEST['id'])); // Display pdf button only if there is class timings.
+    <?php 		$criteria = new CDbCriteria(array("order"=>"STR_TO_DATE(start_time,'%h:%i%p') ASC"));
+		$criteria->addCondition('batch_id=:x');
+		$criteria->params = array(':x' => $_REQUEST['id']);
+        $timing = ClassTimings::model()->findAll( $criteria); // Display pdf button only if there is class timings.
 		if($timing!=NULL){
 	 		echo CHtml::link(Yii::t('timetable','Generate PDF'), array('Weekdays/pdf','id'=>$_REQUEST['id']),array('class'=>'cbut','target'=>'_blank')); 
 	  } ?>
@@ -84,7 +87,10 @@ window.location = "index.php?r=weekdays/timetable&id="+id;
 	
 	
 	?> <br /><br />
-    <?php   $timing = ClassTimings::model()->findAll("batch_id=:x", array(':x'=>$_REQUEST['id']));
+    <?php   		$criteria = new CDbCriteria(array("order"=>"STR_TO_DATE(start_time,'%h:%i%p') ASC"));
+		$criteria->addCondition('batch_id=:x');
+		$criteria->params = array(':x' => $_REQUEST['id']);
+        $timing = ClassTimings::model()->findAll( $criteria);
 	  		$count_timing = count($timing);
 			if($timing!=NULL)
 			{
