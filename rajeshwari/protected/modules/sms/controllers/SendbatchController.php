@@ -89,7 +89,7 @@ class SendbatchController extends RController
 					  {
 						  if($user->mobile_phone)
 						  {
-							$status = SmsSettings::model()->sendSms($user->mobile_phone,0,$model->message) ;
+							// $status = SmsSettings::model()->sendSms($user->mobile_phone,0,$model->message) ;
 							$mobile_phone = $user->mobile_phone ;
 						  }
 						  else
@@ -145,12 +145,12 @@ class SendbatchController extends RController
 	{
 		if(Yii::app()->request->isAjaxRequest){
 			$response	= array('status'=>'failed');
-			if(isset($_POST['sms'])){
+			if(isset($_POST['sms']) && 0){
 				if(isset($_POST['message']) and $_POST['message']!=""){
 					$message	= $_POST['message'];				
 					if(isset($_POST['recipients_num']) and $_POST['recipients_num']!=""){
 						$recipients	= $_POST['recipients_num'];
-						SmsSettings::model()->sendSms($recipients, 0, $message);
+						// SmsSettings::model()->sendSms($recipients, 0, $message);
 						$response['status']		= 'success';
 						$response['message']	= 'Message sent';
 					}

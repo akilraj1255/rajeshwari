@@ -249,8 +249,8 @@ class SettingsController extends RController
 					}
 					//echo $message."<br/><br/>";
 					if($message!=''){ // Send SMS if message is set
-						SmsSettings::model()->sendSms($to,$from,$message);
-						Yii::app()->user->setFlash('notification','SMS send Successfully!');
+						// SmsSettings::model()->sendSms($to,$from,$message);
+						Yii::app()->user->setFlash('notification','Library SMS is disabled!');
 					}
 				} // End check phone number
 			} // End for each book 

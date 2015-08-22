@@ -309,7 +309,7 @@ public function   init() {
 							}
 							
 							if($message!=''){ // Send SMS if there is some message.
-								SmsSettings::model()->sendSms($to,$from,$message);
+								// SmsSettings::model()->sendSms($to,$from,$message);
 							}
 						} // End send SMS to each student
 					}
@@ -321,7 +321,7 @@ public function   init() {
 						$college=Configurations::model()->findByPk(1);
 						$from = $college->config_value;
 						$message = $model->name.' result published';
-						SmsSettings::model()->sendSms($to,$from,$message);
+						// SmsSettings::model()->sendSms($to,$from,$message);
 					}
 				}
 				// END sending SMS
@@ -373,7 +373,7 @@ public function   init() {
 							$college=Configurations::model()->findByPk(1);
 							$from = $college->config_value;
 							$message = $model->name.' is scheduled';
-							SmsSettings::model()->sendSms($to,$from,$message);
+							// SmsSettings::model()->sendSms($to,$from,$message);
 						}
 					}
 				}
@@ -416,7 +416,7 @@ public function   init() {
 						$college=Configurations::model()->findByPk(1);
 						$from = $college->config_value;
 						$message = $deleted->name.' is cancelled';
-						SmsSettings::model()->sendSms($to,$from,$message);
+						// SmsSettings::model()->sendSms($to,$from,$message);
 						
 					}
 				}

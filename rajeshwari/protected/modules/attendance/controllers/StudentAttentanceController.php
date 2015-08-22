@@ -402,9 +402,9 @@ class StudentAttentanceController extends RController
 								$college=Configurations::model()->findByPk(1);
 								$from = $college->config_value;
 								$message = 'Your child '.$student->first_name.' was absent today.';
-								SmsSettings::model()->sendSms($to,$from,$message);
+								//SmsSettings::model()->sendSms($to,$from,$message);
 								$sms_status = 1; // Set flag variable to 1 if atleast one sms was sent.
-								Yii::app()->user->setFlash('notification','SMS send Successfully!');
+								Yii::app()->user->setFlash('notification','Attendance SMS is disabled');
 							} // End check phone number
 						} // End check if guardian added
 					} // End check whether the student was absent

@@ -89,7 +89,7 @@ class SendController extends RController
 					  {
 						  if($user->mobile_phone)
 						  {
-							$status = SmsSettings::model()->sendSms($user->mobile_phone,0,$model->message) ;
+							// $status = SmsSettings::model()->sendSms($user->mobile_phone,0,$model->message) ;
 							$mobile_phone = $user->mobile_phone ;
 						  }
 						  else
@@ -124,7 +124,7 @@ class SendController extends RController
 	{
 		if(Yii::app()->request->isAjaxRequest){
 			$response	= array('status'=>'failed');
-			if(isset($_POST['sms'])){
+			if(isset($_POST['sms']) && 0){
 				if(isset($_POST['message']) and $_POST['message']!=""){
 					$message	= $_POST['message'];				
 					if(isset($_POST['recipients']) and $_POST['recipients']!=""){
@@ -137,7 +137,7 @@ class SendController extends RController
 								$phone_number		= end($parts);
 								$hello				= '';
 								$hello				.=	($name==NULL)?"Hi,":"Hi ".$name.",";
-								$status 			= SmsSettings::model()->sendSms($phone_number, 0, $hello.$message);
+								// $status 			= SmsSettings::model()->sendSms($phone_number, 0, $hello.$message);
 								$Sms				= new Sms;
 								$Sms->phone_number 	= $phone_number; 
 								$Sms->message 		= $hello.$message;

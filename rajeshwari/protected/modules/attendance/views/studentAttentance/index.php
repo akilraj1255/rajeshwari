@@ -198,7 +198,7 @@ foreach($posts as $posts_1)
 	$sms_settings=SmsSettings::model()->findAll();
 	if($sms_settings[0]->is_enabled=='1' and $sms_settings[3]->is_enabled=='1'){ // Checking if SMS is enabled
 	
-		if($posts!=NULL){ // Check if students is present in the batch. Show SMS button only if there are students in the batch. 
+		if($posts!=NULL && 0){ // Check if students is present in the batch. Show SMS button only if there are students in the batch. 
 ?>
             <div class="edit_bttns" style="top:22px; right:250px;"> 
                     <?php echo CHtml::button(Yii::t('attendance','Send SMS'), array('submit' => array('StudentAttentance/sendSms','batch_id'=>$_REQUEST['id']),'class'=>'formbut')); ?>

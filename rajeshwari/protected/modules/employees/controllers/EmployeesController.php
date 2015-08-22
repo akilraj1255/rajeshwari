@@ -233,13 +233,13 @@ class EmployeesController extends RController
 									$from = $college->config_value;
 									$message = 'Welcome to '.$college->config_value. '. You have been added to school database.';
 									$login_message = 'Log on to '.$college->config_value.' account with your email as username and '.$password.' as password.';
-									SmsSettings::model()->sendSms($to,$from,$message);
+									// SmsSettings::model()->sendSms($to,$from,$message);
 									// SmsSettings::model()->sendSms($to,$from,$login_message);
 								} // End send SMS
 							} // Check if SMS is provided
 							
 							
-							UserModule::sendMail($model->email,UserModule::t("You are registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
+							// UserModule::sendMail($model->email,UserModule::t("You are registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
 						}
 				
 				$this->redirect(array('view','id'=>$model->id));

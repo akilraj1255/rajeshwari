@@ -202,7 +202,7 @@ class StudentsController extends RController
 						} // End check if SMS is enabled
 						
 						
-						UserModule::sendMail($model->email,UserModule::t("You are registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
+						// UserModule::sendMail($model->email,UserModule::t("You are registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
 						}
 					// for saving in fee table
 				  $fee_collection = FinanceFeeCollections::model()->findAll('batch_id=:x',array(':x'=>$model->batch_id));
