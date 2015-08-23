@@ -197,8 +197,20 @@ class FinanceFeesController extends RController
 		$list->date = date('Y-m-d');
 		$list->save();
 		echo 'Paid';
+		$to_student = "";
 
+		$sms_settings = SmsSettings::model()->findAll();
+		if($sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
+		$student = Students::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['student_id']));
+		if($student->phone1){ // Checking if phone number is provided
+			$to_student = $student->phone1;	
+		}
+		elseif($student->phone2){
+			$to_student = $student->phone2;
+		}
 
+		SmsSettings::model()->sendSmsFees($to_student,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
+		}
 		$transaction  = new FinanceTransaction;
 				$transaction->amount = $_GET['fees'] - $fees_initial;
 				$transaction->collection_id = $list->fee_collection_id;
@@ -220,6 +232,7 @@ class FinanceFeesController extends RController
 			$student = Students::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['student_id']));
 			$collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['fee_collection_id']));
 			$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$student->admission_no));
+			$to_student="";					
 					if(count($check_admission_no)>0){ // If any particular is present for this student
 						$adm_amount = 0;
 						foreach($check_admission_no as $adm_no){
@@ -278,6 +291,20 @@ class FinanceFeesController extends RController
 				{
 					$model->saveAttributes(array('is_paid'=>1));	
 				}
+				if($student->phone1){ // Checking if phone number is provided
+					$to_student = $student->phone1;	
+				}
+				elseif($student->phone2){
+					$to_student = $student->phone2;
+				}		
+				$balance = ($fees-$fees_paid)>0?($fees-$fees_paid):0;
+
+
+		$sms_settings = SmsSettings::model()->findAll();
+		if($sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
+				SmsSettings::model()->sendSmsFees($to_student,$student->first_name.' '.$student->last_name,$fees_paid,$balance )		;
+
+			}
 				echo CJSON::encode(array(
 						'status'=>'success',
 						));
@@ -584,7 +611,7 @@ $data = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", ar
 					$message = 'Last date for the payment of ['.$collection->name.'] fees is today. i.e.,'.$collection->due_date;
 				}
 				//echo 'Message: '.$message.'<br/><br/>';
-				if($message!=''){ // Send SMS if message is set
+				if($message!='' && 0){ // Send SMS if message is set
 				
 					if($to_parent!=''){ // If unpaid and parent phone number is provided, send SMS
 						SmsSettings::model()->sendSms($to_parent,$from,$message);

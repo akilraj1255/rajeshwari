@@ -63,7 +63,10 @@ Yii::t('weekdays','TimeTable'),
                                         	$weekdays=Weekdays::model()->findAll("batch_id IS NULL");
                                         ?> <br /><br />
                                         <?php   
-                                        $timing = ClassTimings::model()->findAll("batch_id=:x", array(':x'=>$_REQUEST['id']));
+                                        $criteria = new CDbCriteria(array("order"=>"STR_TO_DATE(start_time,'%h:%i%p') ASC"));
+                                        $criteria->addCondition('batch_id=:x');
+                                        $criteria->params = array(':x' => $_REQUEST['id']);
+                                        $timing = ClassTimings::model()->findAll( $criteria);
                                         $count_timing = count($timing);
                                         if($timing!=NULL)
                                         {

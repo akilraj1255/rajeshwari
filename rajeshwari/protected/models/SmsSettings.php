@@ -272,4 +272,120 @@ class SmsSettings extends CActiveRecord
 			}
 		}, $str);
 	}
+
+	public function sendSmsAdmission($to, $name, $collegename, $admission_no)
+	{
+		
+		
+			$uid="dummy";
+			$pin="54cc7d3454d6d";
+			$route="5";
+			$sender="RHPSYG";
+			$tempid="44445";
+			$message = "Admission: Dear $name, You've been admitted to $collegename. Your admission no. is $admission_no . Thank you.";
+
+			// $domain="www.bulksmsgateway.in";
+			// $priority="3";// 1-Normal,2-Priority,3-Marketing
+			$method="POST";
+				
+			$mobile			= $to;
+			$message		= $message;
+			
+			
+			$uid		= urlencode($uid);
+			$pin	= urlencode($pin);
+			$sender			= urlencode($sender);
+			$message		= urlencode($message);
+		
+			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
+		file_put_contents("data.txt", $parameters);
+			$url="http://sms.thirstyscholarstech.com/api/sms.php";
+		
+			$ch = curl_init($url);
+		
+			if($method=="POST")
+			{
+				curl_setopt($ch, CURLOPT_POST,1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,$parameters);
+			}
+			else
+			{
+				$get_url=$url."?".$parameters;
+		
+				curl_setopt($ch, CURLOPT_POST,0);
+				curl_setopt($ch, CURLOPT_URL, $get_url);
+			}
+		
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
+			curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
+			$return_val = curl_exec($ch);
+		
+			
+		return 1 ;
+		
+				
+		
+	
+	
+		
+		}
+
+	public function sendSmsFees($to, $name, $fees, $balance)
+	{
+		
+		
+			$uid="dummy";
+			$pin="54cc7d3454d6d";
+			$route="5";
+			$sender="RHPSYG";
+			$tempid="44446";
+			$message = "Fee: Dear $name, Fee paid $fees. Balance $balance. Thank you.";
+			
+			// $domain="www.bulksmsgateway.in";
+			// $priority="3";// 1-Normal,2-Priority,3-Marketing
+			$method="POST";
+				
+			$mobile			= $to;
+			$message		= $message;
+			
+			
+			$uid		= urlencode($uid);
+			$pin	= urlencode($pin);
+			$sender			= urlencode($sender);
+			$message		= urlencode($message);
+		
+			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
+		file_put_contents("data.txt", $parameters);
+			$url="http://sms.thirstyscholarstech.com/api/sms.php";
+		
+			$ch = curl_init($url);
+		
+			if($method=="POST")
+			{
+				curl_setopt($ch, CURLOPT_POST,1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,$parameters);
+			}
+			else
+			{
+				$get_url=$url."?".$parameters;
+		
+				curl_setopt($ch, CURLOPT_POST,0);
+				curl_setopt($ch, CURLOPT_URL, $get_url);
+			}
+		
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
+			curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
+			$return_val = curl_exec($ch);
+		
+			
+		return 1 ;
+		
+				
+		
+	
+	
+		
+		}
 }
