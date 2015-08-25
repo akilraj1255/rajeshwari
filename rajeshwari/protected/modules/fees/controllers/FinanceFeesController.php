@@ -201,14 +201,15 @@ class FinanceFeesController extends RController
 
 		$sms_settings = SmsSettings::model()->findAll();
 		if($sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
-		$student = Students::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['student_id']));
+		$student = Students::model()->findByAttributes(array('id'=>$list->student_id));
 		if($student->phone1){ // Checking if phone number is provided
 			$to_student = $student->phone1;	
 		}
 		elseif($student->phone2){
 			$to_student = $student->phone2;
 		}
-
+		// $data = $to_student . $student->first_name . $student->last_name ;// ($_GET['fees'] - $fees_initial);
+		// file_put_contents("l.txt", print_r($_POST, true));
 		SmsSettings::model()->sendSmsFees($to_student,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
 		}
 		$transaction  = new FinanceTransaction;

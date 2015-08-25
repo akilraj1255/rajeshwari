@@ -298,7 +298,7 @@ class SmsSettings extends CActiveRecord
 			$message		= urlencode($message);
 		
 			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
-		file_put_contents("data.txt", $parameters);
+		// file_put_contents("data.txt", $parameters);
 			$url="http://sms.thirstyscholarstech.com/api/sms.php";
 		
 			$ch = curl_init($url);
@@ -335,12 +335,12 @@ class SmsSettings extends CActiveRecord
 	{
 		
 		
-			$uid="dummy";
-			$pin="54cc7d3454d6d";
+			$uid="";
+			$pin="";
 			$route="5";
 			$sender="RHPSYG";
 			$tempid="44446";
-			$message = "Fee: Dear $name, Fee paid $fees. Balance $balance. Thank you.";
+			$message = "Fee: Dear $name, Fee paid Rs. $fees. Balance Rs. $balance. Thank you.";
 			
 			// $domain="www.bulksmsgateway.in";
 			// $priority="3";// 1-Normal,2-Priority,3-Marketing
@@ -356,7 +356,7 @@ class SmsSettings extends CActiveRecord
 			$message		= urlencode($message);
 		
 			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
-		file_put_contents("data.txt", $parameters);
+		// file_put_contents("data.txt", $parameters);
 			$url="http://sms.thirstyscholarstech.com/api/sms.php";
 		
 			$ch = curl_init($url);
