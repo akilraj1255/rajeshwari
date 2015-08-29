@@ -45,12 +45,16 @@ $this->breadcrumbs=array(
   <th width="77%"><?php echo Yii::t('students','Relationship');?></th>
  </tr>
  <?php
+ ini_set('display_startup_errors',1);
+ini_set('display_errors',1);
+error_reporting(-1);
   echo $form->hiddenField($model,'ward_id',array('value'=>$_REQUEST['id']));
  foreach($posts as $posts_1)
  {
 	 echo '<tr>';
 	 echo '<td>'.
-	  $form->radioButton($model, 'radio',array($posts_1->id => CHtml::link($posts_1->first_name, array('guardians/view', 'id'=>$posts_1->id)))).
+	  //$form->radioButton($model, 'radio',array($posts_1->id => CHtml::link($posts_1->first_name, array('guardians/view', 'id'=>$posts_1->id)))).
+   $form->radioButton($model, 'radio').CHtml::link($posts_1->first_name, array('guardians/view', 'id'=>$posts_1->id), array('target'=>'_blank')).
           '</td>';
 	 echo '<td>'.$posts_1->relation.'</td>';
 	 echo '</tr>';

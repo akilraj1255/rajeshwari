@@ -197,20 +197,22 @@ class FinanceFeesController extends RController
 		$list->date = date('Y-m-d');
 		$list->save();
 		echo 'Paid';
-		$to_student = "";
+		$to = "";
 
 		$sms_settings = SmsSettings::model()->findAll();
-		if($sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
-		$student = Students::model()->findByAttributes(array('id'=>$list->student_id));
-		if($student->phone1){ // Checking if phone number is provided
-			$to_student = $student->phone1;	
-		}
-		elseif($student->phone2){
-			$to_student = $student->phone2;
-		}
-		// $data = $to_student . $student->first_name . $student->last_name ;// ($_GET['fees'] - $fees_initial);
-		// file_put_contents("l.txt", print_r($_POST, true));
-		SmsSettings::model()->sendSmsFees($to_student,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
+		if($sms_settings[0]->is_enabled=='1' && $sms_settings[7]->is_enabled=='1'){ // Checking if SMS is enabled.
+			$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$list->student_id));
+			$student=Students::model()->findByAttributes(array('id'=>$list->student_id));
+							if(count($guardian)!=0 && $guardian->mobile_phone && $guardian->mobile_phone!="")
+							{
+								$to = $guardian->mobile_phone;
+							}else if($student->phone1){
+								$to = $student->phone1;	
+							}
+							else if($student->phone2){
+								$to = $student->phone2;
+							}
+			SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
 		}
 		$transaction  = new FinanceTransaction;
 				$transaction->amount = $_GET['fees'] - $fees_initial;
@@ -291,19 +293,25 @@ class FinanceFeesController extends RController
 				if($fees == $fees_paid)
 				{
 					$model->saveAttributes(array('is_paid'=>1));	
-				}
-				if($student->phone1){ // Checking if phone number is provided
-					$to_student = $student->phone1;	
-				}
-				elseif($student->phone2){
-					$to_student = $student->phone2;
-				}		
-				$balance = ($fees-$fees_paid)>0?($fees-$fees_paid):0;
+				}	
 
 
 		$sms_settings = SmsSettings::model()->findAll();
-		if($sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
-				SmsSettings::model()->sendSmsFees($to_student,$student->first_name.' '.$student->last_name,$fees_paid,$balance )		;
+		if($sms_settings[0]->is_enabled=='1' && $sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
+
+						$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$_POST['FinanceFees']['student_id']));
+						$student=Students::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['student_id']));
+							if(count($guardian)!=0 && $guardian->mobile_phone && $guardian->mobile_phone!="")
+							{
+								$to = $guardian->mobile_phone;
+							}else if($student->phone1){
+								$to = $student->phone1;	
+							}
+							else if($student->phone2){
+								$to = $student->phone2;
+							}
+				$balance = ($fees-$fees_paid)>0?($fees-$fees_paid):0;
+				SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$fees_paid,$balance )		;
 
 			}
 				echo CJSON::encode(array(

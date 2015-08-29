@@ -19,6 +19,12 @@ class SmsSettings extends CActiveRecord
 	public $enable_exm_result;
 	public $enable_fees;
 	public $enable_library;
+
+	protected $smsuid="";
+	protected $smspin="";
+	protected $smsroute="5";
+	protected $smssender="";
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return SmsSettings the static model class
@@ -175,7 +181,7 @@ class SmsSettings extends CActiveRecord
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
 			curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
-			$return_val = curl_exec($ch);
+			// $return_val = curl_exec($ch);
 			
 			
 			//http://bulksmsgateway.in/sendmessage.php?user=........&password=.......&mobile=........&message=.......&sender=.......&type=3
@@ -275,12 +281,9 @@ class SmsSettings extends CActiveRecord
 
 	public function sendSmsAdmission($to, $name, $collegename, $admission_no)
 	{
+	
+
 		
-		
-			$uid="dummy";
-			$pin="54cc7d3454d6d";
-			$route="5";
-			$sender="RHPSYG";
 			$tempid="44445";
 			$message = "Admission: Dear $name, You've been admitted to $collegename. Your admission no. is $admission_no . Thank you.";
 
@@ -292,9 +295,10 @@ class SmsSettings extends CActiveRecord
 			$message		= $message;
 			
 			
-			$uid		= urlencode($uid);
-			$pin	= urlencode($pin);
-			$sender			= urlencode($sender);
+			$uid		= urlencode($this->smsuid);
+			$pin	= urlencode($this->smspin);
+			$sender			= urlencode($this->smssender);
+			$route			= urlencode($this->smsroute);
 			$message		= urlencode($message);
 		
 			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
@@ -335,10 +339,6 @@ class SmsSettings extends CActiveRecord
 	{
 		
 		
-			$uid="";
-			$pin="";
-			$route="5";
-			$sender="RHPSYG";
 			$tempid="44446";
 			$message = "Fee: Dear $name, Fee paid Rs. $fees. Balance Rs. $balance. Thank you.";
 			
@@ -350,13 +350,72 @@ class SmsSettings extends CActiveRecord
 			$message		= $message;
 			
 			
-			$uid		= urlencode($uid);
-			$pin	= urlencode($pin);
-			$sender			= urlencode($sender);
+			$uid		= urlencode($this->smsuid);
+			$pin	= urlencode($this->smspin);
+			$sender			= urlencode($this->smssender);
+			$route			= urlencode($this->smsroute);
 			$message		= urlencode($message);
 		
 			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&mobile=$mobile&message=$message&pushid=1";
 		// file_put_contents("data.txt", $parameters);
+			$url="http://sms.thirstyscholarstech.com/api/sms.php";
+		
+			$ch = curl_init($url);
+		
+			if($method=="POST")
+			{
+				curl_setopt($ch, CURLOPT_POST,1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,$parameters);
+			}
+			else
+			{
+				$get_url=$url."?".$parameters;
+		
+				curl_setopt($ch, CURLOPT_POST,0);
+				curl_setopt($ch, CURLOPT_URL, $get_url);
+			}
+		
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1); 
+			curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
+			$return_val = curl_exec($ch);
+		
+			
+		return 1 ;
+		
+				
+		
+	
+	
+		
+		}
+
+
+		public function sendSmsExamresult($data)
+	{
+	
+
+		
+			$tempid="44444";
+			$message = "Results Declared: Dear #FIELD2#, The result of examination #FIELD3# is : #FIELD4#. Total #FIELD5#. Thank you.";
+
+			// $domain="www.bulksmsgateway.in";
+			// $priority="3";// 1-Normal,2-Priority,3-Marketing
+			$method="POST";
+				
+			$mobile			= $to;
+			$message		= $message;
+			
+			// file_put_contents("data.txt", $data);
+			$uid		= urlencode($this->smsuid);
+			$pin	= urlencode($this->smspin);
+			$sender			= urlencode($this->smssender);
+			$route			= urlencode($this->smsroute);
+			$message		= urlencode($message);
+			$data = urlencode($data);
+		
+			$parameters="uid=$uid&pin=$pin&route=$route&sender=$sender&tempid=$tempid&message=$message&dynamic=1&data=$data&pushid=1";
+		
 			$url="http://sms.thirstyscholarstech.com/api/sms.php";
 		
 			$ch = curl_init($url);

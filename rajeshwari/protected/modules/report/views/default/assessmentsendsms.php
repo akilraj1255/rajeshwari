@@ -93,32 +93,36 @@ if(isset($_REQUEST['examid']))
     //                 $subjectnames[] = $subject->name;
     //             
 				// }
-				
+			$final_message = "";	
 			foreach($students as $student) // Creating row corresponding to each student.
 			{
-			
+			$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$student->id));
             $to = "";
             $grd = 0;
-                if($student->phone1)
-                {
-                    $to = $student->phone1;
-                }
-                else{
-                    $to = $student->phone2;
-                }
+							if(count($guardian)!=0 && $guardian->mobile_phone && $guardian->mobile_phone!="")
+							{
+								$to = $guardian->mobile_phone;
+							}else if($student->phone1){
+								$to = $student->phone1;	
+							}
+							else if($student->phone2){
+								$to = $student->phone2;
+							}
                 $message = "";
+                $student_name = ucfirst($student->first_name).' '.ucfirst($student->middle_name).' '.ucfirst($student->last_name);
                 	
-                    	$message .= "Adm. no. ". $student->admission_no .": " ; 
+                    	// $message .= "Adm. no. ". $student->admission_no .": " ; 
                     
-                	   $message .= ucfirst($student->first_name).'  '.ucfirst($student->middle_name).'  '.ucfirst($student->last_name) . "\r\n";
-						echo ucfirst($student->first_name).'  '.ucfirst($student->middle_name).'  '.ucfirst($student->last_name); ?>
+                	   // $message .= ucfirst($student->first_name).'  '.ucfirst($student->middle_name).'  '.ucfirst($student->last_name) . "\r\n";
+						// echo ucfirst($student->first_name).'  '.ucfirst($student->middle_name).'  '.ucfirst($student->last_name); ?>
 					
                     <?php
 					$total = 0;
-						$result = "PASS";
+					$result = "PASS";
+					$result_r = "";
                     foreach($exams as $exam) // Creating subject column(s)
 					{
-						
+					
 					$score = ExamScores::model()->findByAttributes(array('student_id'=>$student->id,'exam_id'=>$exam->id));
 					$subject=Subjects::model()->findByAttributes(array('id'=>$exam->subject_id));
 					$examgroup = ExamGroups::model()->findByAttributes(array('id'=>$exam->exam_group_id));
@@ -137,8 +141,11 @@ if(isset($_REQUEST['examid']))
                                     						{
                                     						    // echo $score->marks;
                                     						    $message .= $subject->name.' :'. $score->marks . "\r\n";
+                                    						    $result_r .= $subject->name . ': '.$score->marks. "; ";
                                     						    $total += $score->marks;
-                                    						    if($score->is_failed == 1){ $result = 'FAIL'; }
+                                    						    // if($score->is_failed == 1){ $result = 'FAIL'; }
+                                    						} else {
+                                    							$result_r .= "-";
                                     						}
 														} 
 														  else if($examgroup->exam_type == 'Grades') {
@@ -158,6 +165,7 @@ if(isset($_REQUEST['examid']))
 																		
 																	}
 																$message .= $subject->name.' :'. $grade_value . "\r\n";
+																$result_r .= $subject->name.' :'. $grade_value;
 																break;
 																
 																}
@@ -196,11 +204,8 @@ if(isset($_REQUEST['examid']))
 																	}
 
 																	$message .= $subject->name.' :'. $grade_value . "\r\n";
+																	$result_r .= $subject->name.' :'. $grade_value;
 																$total = '-';
-																	if($grade_value == 'F')
-																	{
-																		$result = 'FAIL';
-																	}
 																 } 
 
 
@@ -213,37 +218,31 @@ if(isset($_REQUEST['examid']))
 									// 	echo $score->remarks;
 									// else
 									// 	echo '-';
-									
+									//Sppend message here
 					}
 					
 					
 					}
-                    if($to != "")
-                    {
 
-                    		if($grd == 1)
+
+
+                    	// $message .= "\r\n Total: ". $total."\r\nResult: ". $result ;
+                    	// $message = "$examname \r\n". $message;
+                        // SmsSettings::model()->sendSms($to,$from,$message);
+					if($to!=""){
+						if($result_r == "")
 						{
-							if($total <600)
-							{
-								$grde = 'A';
-							}
-							 if($total<550)
-							{
-								$grde = 'B';
-							}
-							if($total<450)
-							{
-								$grde = 'C';
-							}
-							$total = $grde;
+							$result_r = "-";
 						}
-
-
-                    	$message .= "\r\n Total: ". $total."\r\nResult: ". $result ;
-                    	$message = "$examname \r\n". $message;
-                        SmsSettings::model()->sendSms($to,$from,$message);
-                    }
+						$final_message .= "$to,$student_name,$examname,$result_r,$total".PHP_EOL;
+					}
+				
 					
+			}
+			//Send sms here
+			$sms_settings = SmsSettings::model()->findAll();
+			if($sms_settings[0]->is_enabled=='1' && $sms_settings[6]->is_enabled=='1'){
+				SmsSettings::model()->sendSmsExamresult($final_message);
 			}
 			
 }

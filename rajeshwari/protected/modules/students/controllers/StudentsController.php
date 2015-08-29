@@ -186,27 +186,7 @@ class StudentsController extends RController
 						// UserModule::sendMail($model->email,UserModule::t("You are registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
 						}
 
-						// for sending sms
-						$sms_settings = SmsSettings::model()->findAll();
-						$to = '';
-						if($sms_settings[0]->is_enabled=='1'){ // Checking if SMS is enabled.
 
-							if($model->phone1){
-								$to = $model->phone1;	
-							}
-							elseif($model->phone2){
-								$to = $model->phone2;
-							}
-							if($to!=''){ // Send SMS if phone number is provided
-								$college=Configurations::model()->findByPk(1);
-								$from = $college->config_value;
-								//$message = 'Welcome to '.$college->config_value.'. You have been successfully admitted. Please note your admission no: '. $_POST['Students']['admission_no'];
-								$login_message = 'Log on to '.$college->config_value.' account with your email as username and '.$password.' as password.';
-								// SmsSettings::model()->sendSms($to,$from,$message);
-								$sms_name = $model->first_name . " ". $model->last_name;
-								SmsSettings::model()->sendSmsAdmission($to,$sms_name, $college->config_value,$_POST['Students']['admission_no'] );
-							} // End send SMS
-						} // End check if SMS is enabled
 
 					// for saving in fee table
 				  $fee_collection = FinanceFeeCollections::model()->findAll('batch_id=:x',array(':x'=>$model->batch_id));

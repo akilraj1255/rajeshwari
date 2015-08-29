@@ -113,7 +113,6 @@ class GuardiansController extends RController
 				
 				if($_POST['Guardians']['user_create']==0)
 				{
-				
 					//adding user for current guardian
 					$user=new User;
 					$profile=new Profile;
@@ -143,28 +142,38 @@ class GuardiansController extends RController
 					//$model->uid = $user->id;
 					//$model->save();
 					
-					// for sending sms
-					$sms_settings = SmsSettings::model()->findAll();
-					$to = '';
-					if($sms_settings[0]->is_enabled=='1' and $sms_settings[2]->is_enabled=='1'){ // Checking if SMS is enabled.
-						if($model->mobile_phone){
-							$to = $model->mobile_phone;	
-						}
-						
-						if($to!=''){ // Send SMS if phone number is provided
-							$college=Configurations::model()->findByPk(1);
-							$from = $college->config_value;
-							$message = 'Welcome to '.$college->config_value;
-							// $login_message = 'Log on to '.$college->config_value.' account with your email as username and '.$password.' as password.';
-							SmsSettings::model()->sendSms($to,$from,$message);
-							// SmsSettings::model()->sendSms($to,$from,$login_message);
-						} // End send SMS
-					} // End check if SMS is enabled
+						// for sending sms
+
 					
 					// UserModule::sendMail($model->email,UserModule::t("You registered from {site_name}",array('{site_name}'=>Yii::app()->name)),UserModule::t("Please login to your account with your email id as username and password {password}",array('{password}'=>$password)));
 					}
 						
 				}
+
+						$sms_settings = SmsSettings::model()->findAll();
+						$to = '';
+						if($sms_settings[0]->is_enabled=='1' && $sms_settings[2]->is_enabled=='1'){ // Checking if SMS is enabled.
+							$guardianp = $model;
+							if(count($guardianp)!=0 && $guardianp->mobile_phone && $guardianp->mobile_phone!="")
+							{
+								$to = $guardianp->mobile_phone;
+							}else if($student->phone1){
+								$to = $student->phone1;	
+							}
+							else if($student->phone2){
+								$to = $student->phone2;
+							}
+							if($to!=''){ // Send SMS if phone number is provided
+								$college=Configurations::model()->findByPk(1);
+								$from = $college->config_value;
+								//$message = 'Welcome to '.$college->config_value.'. You have been successfully admitted. Please note your admission no: '. $_POST['Students']['admission_no'];
+								// $login_message = 'Log on to '.$college->config_value.' account with your email as username and '.$password.' as password.';
+								// SmsSettings::model()->sendSms($to,$from,$message);
+								$sms_name = $student->first_name . " ". $student->last_name;
+								SmsSettings::model()->sendSmsAdmission($to,$sms_name, $from,$student->admission_no);
+							} // End send SMS
+						} // End check if SMS is enabled
+
 				$this->redirect(array('addguardian','id'=>$model->ward_id));
 			}
 		}
