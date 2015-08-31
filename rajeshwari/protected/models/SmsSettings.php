@@ -379,7 +379,7 @@ class SmsSettings extends CActiveRecord
 			curl_setopt($ch, CURLOPT_HEADER,0);  // DO NOT RETURN HTTP HEADERS 
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);  // RETURN THE CONTENTS OF THE CALL
 			$return_val = curl_exec($ch);
-		
+				
 			
 		return 1 ;
 		

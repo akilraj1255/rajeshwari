@@ -73,7 +73,10 @@ $this->breadcrumbs=array(
                   $collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQUEST['collection']));
 				  $category = FinanceFeeCategories::model()->findByAttributes(array('id'=>$collection->fee_category_id));
                   $particulars = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));
-				  $currency=Configurations::model()->findByPk(5);	
+				  $currency=Configurations::model()->findByPk(5);
+				  if($currency->config_value == "₹"){
+				  	$currency->config_value = '<img src="images/rupee_symbol.jpg" width="15">';				  	
+				  } 
             ?>
             <tr>
                 <td style="width:100px;"><b><?php echo Yii::t('fees','Course'); ?></b></td>

@@ -199,8 +199,8 @@ class FinanceFeesController extends RController
 		echo 'Paid';
 		$to = "";
 
-		$sms_settings = SmsSettings::model()->findAll();
-		if($sms_settings[0]->is_enabled=='1' && $sms_settings[7]->is_enabled=='1'){ // Checking if SMS is enabled.
+		$sms_settings=SmsSettings::model()->findByAttributes(array('settings_key'=>'FeesEnabled'));
+		if($sms_settings->is_enabled=='1'){ // Checking if SMS is enabled.
 			$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$list->student_id));
 			$student=Students::model()->findByAttributes(array('id'=>$list->student_id));
 							if(count($guardian)!=0 && $guardian->mobile_phone && $guardian->mobile_phone!="")
@@ -227,6 +227,8 @@ class FinanceFeesController extends RController
 	}
 	public function actionPartialfees()
 	{
+		
+
 		if(isset($_POST['FinanceFees']) and isset($_POST['FinanceFees']['fees_paid'])) 
         {
 			$model = $this->loadModel($_POST['FinanceFees']['id']);
@@ -296,8 +298,8 @@ class FinanceFeesController extends RController
 				}	
 
 
-		$sms_settings = SmsSettings::model()->findAll();
-		if($sms_settings[0]->is_enabled=='1' && $sms_settings[5]->is_enabled=='1'){ // Checking if SMS is enabled.
+		$sms_settings=SmsSettings::model()->findByAttributes(array('settings_key'=>'FeesEnabled'));
+		if($sms_settings->is_enabled=='1'){ // Checking if SMS is enabled.
 
 						$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$_POST['FinanceFees']['student_id']));
 						$student=Students::model()->findByAttributes(array('id'=>$_POST['FinanceFees']['student_id']));

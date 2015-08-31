@@ -239,8 +239,8 @@ echo '<br/><br/>';
 				echo ' | ';
 				//if($list_1->fees_paid > $fees)
 				//{
-					echo CHtml::ajaxLink(Yii::t('fees','Edit'), Yii::app()->createUrl('fees/FinanceFees/Editfees' ), array('type' =>'GET','data' =>array( 'id' => $list_1->id ),'dataType' => 'text',  'update' =>'#edit'.$list_1->id, 'onclick'=>'$("#editfees'.$list_1->id.'").dialog("open"); return false;',));
-					echo '<div  id="edit'.$list_1->id.'"></div>';
+					//echo CHtml::ajaxLink(Yii::t('fees','Edit'), Yii::app()->createUrl('fees/FinanceFees/Editfees' ), array('type' =>'GET','data' =>array( 'id' => $list_1->id ),'dataType' => 'text',  'update' =>'#edit'.$list_1->id, 'onclick'=>'$("#editfees'.$list_1->id.'").dialog("open"); return false;',));
+					//echo '<div  id="edit'.$list_1->id.'"></div>';
 				//}
 				//else
 				//{
@@ -251,9 +251,9 @@ echo '<br/><br/>';
 			 else
 			 {
 			 	echo Yii::t('fees','Paid');
-				echo ' | ';
-				echo CHtml::ajaxLink(Yii::t('fees','Edit'), Yii::app()->createUrl('fees/FinanceFees/Editfees' ), array('type' =>'GET','data' =>array( 'id' => $list_1->id ),'dataType' => 'text',  'update' =>'#edit'.$list_1->id, 'onclick'=>'$("#editfees'.$list_1->id.'").dialog("open"); return false;',));
-					echo '<div  id="edit'.$list_1->id.'"></div>';
+				//echo ' | ';
+				//echo CHtml::ajaxLink(Yii::t('fees','Edit'), Yii::app()->createUrl('fees/FinanceFees/Editfees' ), array('type' =>'GET','data' =>array( 'id' => $list_1->id ),'dataType' => 'text',  'update' =>'#edit'.$list_1->id, 'onclick'=>'$("#editfees'.$list_1->id.'").dialog("open"); return false;',));
+					//echo '<div  id="edit'.$list_1->id.'"></div>';
 				
 			 }
 			 ?>
