@@ -39,6 +39,9 @@
 	//$particulars = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));	
 	$batch=Batches::model()->findByAttributes(array('id'=>$_REQUEST['batch']));
 	$currency=Configurations::model()->findByPk(5);
+      if($currency->config_value == "₹"){
+      $currency->config_value = '<img src="images/rupee_symbol.png" width="8">';                 
+    } 
 
 ?>
 
