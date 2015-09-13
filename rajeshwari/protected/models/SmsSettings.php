@@ -284,7 +284,7 @@ class SmsSettings extends CActiveRecord
 	
 
 		
-			$tempid="44445";
+			$tempid="45140";
 			$message = "Admission: Dear $name, You've been admitted to $collegename. Your admission no. is $admission_no . Thank you.";
 
 			// $domain="www.bulksmsgateway.in";
@@ -339,7 +339,7 @@ class SmsSettings extends CActiveRecord
 	{
 		
 		
-			$tempid="44446";
+			$tempid="45139";
 			$message = "Fee: Dear $name, Fee paid Rs. $fees. Balance Rs. $balance. Thank you.";
 			
 			// $domain="www.bulksmsgateway.in";
@@ -396,7 +396,7 @@ class SmsSettings extends CActiveRecord
 	
 
 		
-			$tempid="44444";
+			$tempid="45141";
 			$message = "Results Declared: Dear #FIELD2#, The result of examination #FIELD3# is : #FIELD4#. Total #FIELD5#. Thank you.";
 
 			// $domain="www.bulksmsgateway.in";

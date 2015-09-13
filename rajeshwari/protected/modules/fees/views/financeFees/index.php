@@ -73,6 +73,19 @@ echo '<br/><br/>';
 
 <?php if(isset($_REQUEST['batch']) && isset($_REQUEST['collection']))
 { 
+	$batch=$_REQUEST['batch'];
+
+	$student_list= Yii::app()->db->createCommand('select students.id from students where batch_id=:batch_id')->bindValue('batch_id',$batch)->queryAll();
+	$student_count = count($students_list);
+	
+	$student_arr_1=array();
+	
+	foreach($student_list as $student){
+		foreach($student as $item){
+			array_push($student_arr_1,$item); // Get the ids of students and push into an array
+		}
+	}
+	
 	$collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQUEST['collection']));
 	//$particular = FinanceFeeParticulars::model()->findByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id));
 	$particular = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));
@@ -81,11 +94,29 @@ echo '<br/><br/>';
 	{
 		//$amount = 0;
 		$list  = FinanceFees::model()->findAll("fee_collection_id=:x", array(':x'=>$_REQUEST['collection']));
+		$student_arr_2=array();
+		foreach($list as $item){
+			 array_push($student_arr_2,$item->student_id); // Push the students present in Finance fees tables
+		}
+
+		$missing_students = array_diff($student_arr_1,$student_arr_2);
+		foreach($missing_students as $student){
+			$finance = new FinanceFees;
+			$finance->fee_collection_id = $_REQUEST['collection'];
+			$finance->student_id = $student;
+			$finance->is_paid = 0;
+			$finance->save();
+		}
+	//	var_dump($missing_students);
+		//$amount = 0;
+		$list  = FinanceFees::model()->findAll("fee_collection_id=:x", array(':x'=>$_REQUEST['collection']));
+		
 		?>
 		<td>
 		 </tr>
 	</table>
 	</div></div>
+	
 	   <div class="tableinnerlist"> 
 		<table width="80%" cellspacing="0" cellpadding="0">
 			<tr>
@@ -140,7 +171,10 @@ echo '<br/><br/>';
 		   <?php 
 		   $i= 1;
 		   foreach($list as $list_1) { 
-		    $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id,'is_deleted'=>0));
+			if(in_array($inactive_students,$list_1->student_id)){
+				continue;
+			}
+		    $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id,'is_deleted'=>0,'is_active'=>1));
 				if($posts==NULL)
 				{
 					continue;

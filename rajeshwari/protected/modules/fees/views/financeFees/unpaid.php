@@ -74,15 +74,44 @@ echo '<br/><br/>';
 
 <?php if(isset($_REQUEST['batch']) && isset($_REQUEST['course']))
 { 
+$batch=$_REQUEST['batch'];
 $collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQUEST['course']));
 //$particular = FinanceFeeParticulars::model()->findByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id));
 $particular = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));
 $currency=Configurations::model()->findByPk(5);
 
+	$student_list= Yii::app()->db->createCommand('select students.id from students where batch_id=:batch_id')->bindValue('batch_id',$batch)->queryAll();
+	$student_count = count($students_list);
+	
+	$student_arr_1=array();
+	
+	foreach($student_list as $student){
+		foreach($student as $item){
+			array_push($student_arr_1,$item); // Get the ids of students and push into an array
+		}
+	}
+
 if(count($particular)!=0)
 {
 	//$amount = 0;
 	$list  = FinanceFees::model()->findAll("fee_collection_id=:x and is_paid=:y", array(':x'=>$_REQUEST['course'],':y'=>0));
+	$student_arr_2=array();
+		foreach($list as $item){
+			 array_push($student_arr_2,$item->student_id); // Push the students present in Finance fees tables
+		}
+		
+		$missing_students = array_diff($student_arr_1,$student_arr_2);
+		
+		foreach($missing_students as $student){
+			$finance = new FinanceFees;
+			$finance->fee_collection_id = $_REQUEST['collection'];
+			$finance->student_id = $student;
+			$finance->is_paid = 0;
+			$finance->save();
+		}
+	//	var_dump($missing_students);
+		//$amount = 0;
+		$list  = FinanceFees::model()->findAll("fee_collection_id=:x and is_paid=:y", array(':x'=>$_REQUEST['course'],':y'=>0));
 	?>
     <td>
      </tr>
@@ -193,7 +222,7 @@ if(count($particular)!=0)
        <?php 
 	   $i= 1;
 	   foreach($list as $list_1) {
-		   $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id,'is_deleted'=>0));
+		   $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id,'is_deleted'=>0,'is_active'=>1));
 		   if($posts==NULL)
 				{
 					continue;
