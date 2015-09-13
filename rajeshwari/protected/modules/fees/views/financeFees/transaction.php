@@ -118,7 +118,16 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
 
 
 	//$amount = 0;
-	$list  = FinanceTransaction::model()->findAll("collection_id=:x and student_id=:y", array(':x'=>$_REQUEST['collection'],':y'=>$_REQUEST['student']));
+	// $list  = FinanceTransaction::model()->findAll("collection_id=:x and student_id=:y", array(':x'=>$_REQUEST['collection'],':y'=>array('1002','1022')));
+	$stud = Students::model()->findAllByAttributes(array('admission_no'=>$_REQUEST['student']));
+	$sid = array();
+	foreach ($stud as $s) {
+		$sid[] = $s->id;
+	}
+	$list  = FinanceTransaction::model()->findAllByAttributes(array(
+		'collection_id'=>$_REQUEST['collection'],
+		'student_id'=>$sid
+		));
 	// print_r($list);
     ?>
 
@@ -127,6 +136,8 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
     <table width="80%" cellspacing="0" cellpadding="0">
         <tr>
          <th><strong><?php echo Yii::t('fees','ID.');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Admission No.');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Batch');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Amount');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Date');?></strong></th>
         </tr>
@@ -134,8 +145,17 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
         <?php 
 		$i = 1;
 			foreach($list as $list_item) { 
-
+				$student = Students::model()->findByAttributes(array('id'=>$list_item['student_id']));
+				$batch = Batches::model()->findByAttributes(array('id'=>$student['batch_id']));
+				if($batch!=NULL)
+				{
+					$batch_name = $batch->name;
+				} else {
+					$batch_name = "-";
+				}
                 echo '<td>'. $list_item['id']. '</td>';
+                echo '<td>'. $student['admission_no']. '</td>';
+                echo '<td>'. $batch_name. '</td>';
                 echo '<td>'. $list_item['amount']. '</td>';
                 echo '<td>'. $list_item['transaction_date']. '</td>';
 
