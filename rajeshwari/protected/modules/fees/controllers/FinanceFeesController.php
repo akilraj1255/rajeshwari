@@ -496,6 +496,17 @@ $data = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", ar
  
 	}
 	 
+	public function actionPaidpdf()
+    {
+        $batch_name = Batches::model()->findByAttributes(array('id'=>$_REQUEST['batch']));
+		$batch_name = $batch_name->name.' Students With Paid Fees.pdf';
+		
+        # HTML2PDF has very similar syntax
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $html2pdf->WriteHTML($this->renderPartial('paidpdf',array('model'=>$_REQUEST['collection']), true));
+        $html2pdf->Output($batch_name);
+ 
+	}
 	 
 	 public function actionCashregister(){
 
