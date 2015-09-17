@@ -65,6 +65,7 @@ Yii::app()->clientScript->registerScript(
     <div class="c_subbutCon" align="right" style="width:100%; height:40px; position:relative">
     <div class="edit_bttns" style="top:0px; right:-6px">
     <ul>
+	<div class="ea_pdf" style="top:1px; right:150px;"><?php echo CHtml::link('<img src="images/pdf-but.png" border="0" />', array('batches/batchstudentspdf','id'=>$_REQUEST['id']),array('target'=>"_blank")); ?></div>
     <li>
     <?php echo CHtml::link('<span>'.Yii::t('Batch','Add Student').'</span>', array('/students/students/create','bid'=>$_REQUEST['id']),array('class'=>'addbttn last'));?>
     </li>

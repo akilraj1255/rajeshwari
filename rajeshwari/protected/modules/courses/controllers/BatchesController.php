@@ -94,6 +94,18 @@ class BatchesController extends RController
 		));
 	}
 
+		 
+	public function actionBatchstudentspdf()
+    {
+        $batch_name = Batches::model()->findByAttributes(array('id'=>$_REQUEST['id']));
+		$batch_name = $batch_name->name.'_Batchstudents.pdf';
+		
+        # HTML2PDF has very similar syntax
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $html2pdf->WriteHTML($this->renderPartial('batchstudentspdf',array('model'=>$_REQUEST['id']), true));
+        $html2pdf->Output($batch_name);
+ 
+	}
 	/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
