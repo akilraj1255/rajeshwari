@@ -98,6 +98,13 @@ echo '<br/><br/>';
 		foreach($list as $item){
 			 array_push($student_arr_2,$item->student_id); // Push the students present in Finance fees tables
 		}
+		foreach($student_arr_2 as $student){
+				if (!in_array($student,$student_arr_1)){
+					echo("Found $student");
+						$command=Yii::app()->db->createCommand('delete from finance_fees where student_id=:id and fee_collection_id=:coll_id and date is null')->bindValue('id',$student)->bindValue('coll_id',$_REQUEST['collection']);
+						$command->execute();
+				}
+		}
 
 		$missing_students = array_diff($student_arr_1,$student_arr_2);
 		foreach($missing_students as $student){

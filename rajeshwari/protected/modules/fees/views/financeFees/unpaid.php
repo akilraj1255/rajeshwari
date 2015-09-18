@@ -26,7 +26,7 @@ window.location= 'index.php?r=fees/financeFees/unpaid&batch='+id_1+'&collection=
     </td>
     <td valign="top">
     <div class="cont_right formWrapper">
-    <h1><?php echo Yii::t('fees','Unpaid Students');?></h1>
+    <h1><?php echo Yii::t('fees','Fees Collection');?></h1>
     <div class="formCon" style="padding:3px;">
     <div class="formConInner" style="padding:3px 10px;">
     <table width="80%" border="0" cellspacing="0" cellpadding="0">
