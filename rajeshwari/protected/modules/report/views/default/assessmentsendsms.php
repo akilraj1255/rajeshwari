@@ -68,7 +68,7 @@ if(isset($_REQUEST['examid']))
             	
 					<?php 
 					if($students!=NULL)
-						echo "Sending SMS to ". count($students)." students";
+						echo "SMS sent to ". count($students)." students. Please note that the SMS will be sent only for the students who have their parent's or guardian's mobile number resgistered.";
 					else
 						echo '-';
 					?>
@@ -96,9 +96,10 @@ if(isset($_REQUEST['examid']))
 			$final_message = "";	
 			foreach($students as $student) // Creating row corresponding to each student.
 			{
-			$guardian = Guardians::model()->findByAttributes(array('ward_id'=>$student->id));
+			$guardian = Guardians::model()->findByAttributes(array('id'=>$student->parent_id));
             $to = "";
             $grd = 0;
+            		
 							if(count($guardian)!=0 && $guardian->mobile_phone && $guardian->mobile_phone!="")
 							{
 								$to = $guardian->mobile_phone;
@@ -108,6 +109,7 @@ if(isset($_REQUEST['examid']))
 							else if($student->phone2){
 								$to = $student->phone2;
 							}
+							
                 $message = "";
                 $student_name = ucfirst($student->first_name).' '.ucfirst($student->middle_name).' '.ucfirst($student->last_name);
                 	
@@ -118,6 +120,7 @@ if(isset($_REQUEST['examid']))
 					
                     <?php
 					$total = 0;
+					$total_of_max_marks =0;
 					$result = "PASS";
 					$result_r = "";
                     foreach($exams as $exam) // Creating subject column(s)
@@ -141,8 +144,9 @@ if(isset($_REQUEST['examid']))
                                     						{
                                     						    // echo $score->marks;
                                     						    $message .= $subject->name.' :'. $score->marks . "\r\n";
-                                    						    $result_r .= $subject->name . ': '.$score->marks. "; ";
-                                    						    $total += $score->marks;
+                                    						    $result_r .= $subject->name . ': '.round($score->marks).'/'.round($exam->maximum_marks). ";" ;
+                                    						    $total += round($score->marks);
+                                    						    $total_of_max_marks+=round($exam->maximum_marks);
                                     						    // if($score->is_failed == 1){ $result = 'FAIL'; }
                                     						} else {
                                     							$result_r .= "-";
@@ -229,21 +233,31 @@ if(isset($_REQUEST['examid']))
                     	// $message .= "\r\n Total: ". $total."\r\nResult: ". $result ;
                     	// $message = "$examname \r\n". $message;
                         // SmsSettings::model()->sendSms($to,$from,$message);
+                        		
 					if($to!=""){
 						if($result_r == "")
 						{
 							$result_r = "-";
 						}
+						$total=$total.'/'.$total_of_max_marks;
 						$final_message .= "$to,$student_name,$examname,$result_r,$total".PHP_EOL;
+						
+						
+						
 					}
 				
 					
+			
+			
+			
 			}
 			//Send sms here
-			$sms_settings = SmsSettings::model()->findAll();
-			if($sms_settings[0]->is_enabled=='1' && $sms_settings[6]->is_enabled=='1'){
-				SmsSettings::model()->sendSmsExamresult($final_message);
-			}
+				$sms_settings = SmsSettings::model()->findAll();
+						
+				if($sms_settings[0]->is_enabled=='1' && $sms_settings[6]->is_enabled=='1'){
+					//echo "$final_message";
+					SmsSettings::model()->sendSmsExamresult($final_message);
+				}
 			
 }
 else
