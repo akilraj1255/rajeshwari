@@ -93,7 +93,7 @@ if(count($particular)!=0)
 	?>
 
 <div class="tableinnerlist"> 
-    
+		<div class="ea_pdf" style="top:6px; right:1px;"><?php echo CHtml::link('<img src="images/pdf-but.png" border="0" />', array('/fees/FinanceFees/paidpdf','batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course']),array('target'=>"_blank")); ?></div>
         <?php 
 		$i = 1;
 			foreach($particular as $particular_1) { ?>

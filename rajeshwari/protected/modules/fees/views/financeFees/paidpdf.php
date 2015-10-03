@@ -64,7 +64,7 @@ $this->breadcrumbs=array(
     </div>
     <!-- End Header -->
     <br /><br />
-    <span align="center"><h4><?php echo Yii::t('fees','LIST OF STUDENTS WITH PENDING FEES'); ?></h4></span>
+    <span align="center"><h4><?php echo Yii::t('fees','LIST OF STUDENTS WITH NO FEE DUES'); ?></h4></span>
     <!-- Fees and course details -->
     <div style="border:#CCC 1px; width:700px; padding:10px 10px; background:#E1EAEF;">
         <table style="font-size:14px;">
@@ -171,7 +171,7 @@ $this->breadcrumbs=array(
         <th style="padding-top:10px;"><?php echo Yii::t('unpaid','Admission No');?></th>
         <th style="width:200px; padding-top:10px;"><?php echo Yii::t('unpaid','Name of the student');?></th>
         <th style="width:70px; padding-top:10px;"><?php echo Yii::t('unpaid','Fees');?></th>
-        <th style="width:100px; padding-top:10px;"><?php echo Yii::t('unpaid','Fees Paid');?></th>
+        <th style="width:70px; padding-top:10px;"><?php echo Yii::t('unpaid','Fees Paid');?></th>
         <th style="width:70px; padding-top:10px;"><?php echo Yii::t('unpaid','Balance');?></th>
     </tr>
 <?php 
@@ -180,9 +180,8 @@ $this->breadcrumbs=array(
 	//$j=0;
 	foreach($particulars as $particular)
 	 {
-	 
 	 $amount = $amount + $particular->amount;
-	 $list  = FinanceFees::model()->findAll("fee_collection_id=:x and is_paid=:y", array(':x'=>$_REQUEST['collection'],':y'=>0));
+	 $list  = FinanceFees::model()->findAll("fee_collection_id=:x", array(':x'=>$_REQUEST['collection']));
 	}
 
 	/*if($j%2==0)
@@ -195,7 +194,7 @@ $this->breadcrumbs=array(
 	foreach($list as $list_1)
 	{
 		$student=Students::model()->findByAttributes(array('id'=>$list_1->student_id));
-		if($student==NULL || $student->is_active==0)
+		if($student==NULL || $list_1->is_paid==0)
 		{
 			continue;
 		}
