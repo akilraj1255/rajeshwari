@@ -44,7 +44,7 @@ class ExamGroups extends CActiveRecord
 			array('exam_date', 'safe'),			
 			array('exam_type,name,exam_date', 'required'),
 			array('exam_date','type','type' =>'datetime','dateFormat' => 'Y-m-d','message' => "{attribute}: is not a date!"),                   
-			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ ]+$/','message'=>"{attribute} should contain only letters."),
+			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z0-9_ ]+$/','message'=>"{attribute} should contain only letters."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, batch_id, exam_type, is_published, result_published, exam_date', 'safe', 'on'=>'search'),
