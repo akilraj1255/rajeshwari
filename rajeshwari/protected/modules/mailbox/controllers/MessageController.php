@@ -32,6 +32,7 @@ class MessageController extends RController
 	
 	public function actionInbox($ajax=null)
 	{
+		$this->redirect(array('/students'));
 		$this->module->registerConfig($this->getAction()->getId());
 		$cs = $this->module->getClientScript();
 		$cs->registerScriptFile($this->module->getAssetsUrl().'/js/mailbox.js',CClientScript::POS_END);
