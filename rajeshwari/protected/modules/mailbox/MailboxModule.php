@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Works with javascript on/off
@@ -631,3 +630,4 @@ EOD;
 		}
 	}
 }
+?>
