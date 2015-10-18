@@ -92,7 +92,10 @@ Yii::app()->clientScript->registerScript(
                     <td ><?php echo Yii::t('Batch','Student Name');?></td>
                     <td ><?php echo Yii::t('Batch','Admission Number');?></td>
                     <td ><?php echo Yii::t('Batch','Gender');?></td>
+                    <td ><?php echo Yii::t('Batch','Parent/Guardian Name');?></td>
+                    <td ><?php echo Yii::t('Batch','Contact');?></td>
                     <td ><?php echo Yii::t('Batch','Actions');?></td>
+                    
                     </tr>
                         <?php
 						$i=0;
@@ -112,6 +115,29 @@ Yii::app()->clientScript->registerScript(
 								  {
 									  echo Yii::t('Batch','Female');
 								  }?></td>
+                                 <?php
+                                        $guardian=Guardians::model()->findAll("id=:x", array(':x'=>$posts_1->parent_id));
+                                ?>
+                                <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->first_name&& $guardian[0]->first_name!=""){
+                                            echo $guardian[0]->first_name;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>
+                                  <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->mobile_phone && $guardian[0]->mobile_phone!=""){
+                                            echo $guardian[0]->mobile_phone;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>  
 								<td >
 								<div style="position:absolute;">
 								<div  id="<?php echo $i; ?>" class="act_but"><?php echo Yii::t('Batch','Actions');?></div>
@@ -131,6 +157,7 @@ Yii::app()->clientScript->registerScript(
                                 <div id="<?php echo $posts_1->id ?>"></div>
 								</div>
 								</td>
+                               
                             <?php }
                             ?>
                     </table>
@@ -189,6 +216,29 @@ Yii::app()->clientScript->registerScript(
 								  {
 									  echo Yii::t('Batch','Female');
 								  }?></td>
+                                 <?php
+                                        $guardian=Guardians::model()->findAll("id=:x", array(':x'=>$posts_1->parent_id));
+                                ?>
+                                <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->first_name&& $guardian[0]->first_name!=""){
+                                            echo $guardian[0]->first_name;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>
+                                  <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->mobile_phone && $guardian[0]->mobile_phone!=""){
+                                            echo $guardian[0]->mobile_phone;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>  
 								<td >
 								<div style="position:absolute;">
 								<div  id="<?php echo $j; ?>" class="act_but"><?php echo Yii::t('Batch','Actions');?></div>
