@@ -78,9 +78,9 @@ $this->widget('zii.widgets.grid.CGridView', array(
 				'filter' => false,
 				'htmlOptions' => array('style'=>'width:250px;')
 				),
-	array('name'=>'email',
+	array('name'=>'mobile_phone',
 				'type'=>'raw',
-				'value'=>'$data->email'),
+				'value'=>'$data->mobile_phone'),
 							
 		/*'id',
 		'ward_id',
