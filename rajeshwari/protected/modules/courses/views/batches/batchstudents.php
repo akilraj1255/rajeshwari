@@ -216,6 +216,29 @@ Yii::app()->clientScript->registerScript(
 								  {
 									  echo Yii::t('Batch','Female');
 								  }?></td>
+                                 <?php
+                                        $guardian=Guardians::model()->findAll("id=:x", array(':x'=>$posts_1->parent_id));
+                                ?>
+                                <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->first_name&& $guardian[0]->first_name!=""){
+                                            echo $guardian[0]->first_name;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>
+                                  <td>
+                                    <?php
+                                        if($guardian &&$guardian[0]->mobile_phone && $guardian[0]->mobile_phone!=""){
+                                            echo $guardian[0]->mobile_phone;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    ?>
+                                </td>  
 								<td >
 								<div style="position:absolute;">
 								<div  id="<?php echo $j; ?>" class="act_but"><?php echo Yii::t('Batch','Actions');?></div>

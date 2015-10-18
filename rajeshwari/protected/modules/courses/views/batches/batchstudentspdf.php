@@ -1,21 +1,21 @@
 <?php
 $this->breadcrumbs=array(
-	'Student Attentances'=>array('/courses'),
-	'Attendance',
+    'Student Attentances'=>array('/courses'),
+    'Attendance',
 );
 ?>
 <style>
 .unpaid_table{
-	border-top:1px #CCC solid;
-	margin:30px 0px;
-	font-size:15px;
-	border-right:1px #CCC solid;
+    border-top:1px #CCC solid;
+    margin:30px 0px;
+    font-size:10px;
+    border-right:1px #CCC solid;
 }
 .unpaid_table td,th{
-	border-left:1px #CCC solid;
-	padding:5px 6px;
-	border-bottom:1px #CCC solid;
-	
+    border-left:1px #CCC solid;
+    padding:5px 6px;
+    border-bottom:1px #CCC solid;
+    
 }
 </style>
 <div class="atnd_Con" style="padding-left:20px; padding-top:30px;">
@@ -61,8 +61,8 @@ $this->breadcrumbs=array(
                 </td>
             </tr>
         </table>
-		</div>
-		<br /><br />
+        </div>
+        <br /><br />
     <span align="center"><h4><?php echo Yii::t('student','STUDENTS OF THE BATCH'); ?></h4></span>
     <!-- Fees and course details -->
     <div style="border:#CCC 1px; width:700px; padding:10px 10px; background:#E1EAEF;">
@@ -86,44 +86,64 @@ $this->breadcrumbs=array(
     <!-- Students List Table -->
 <table width="100%" cellspacing="0" class="unpaid_table">
     <tr style="background:#E1EAEF; text-align:center; line-height:10px;">
-        <th style="width:40px; padding-top:10px;"><?php echo Yii::t('courses','Sl no.');?></th>
-        <th style="padding-top:10px;"><?php echo Yii::t('courses','Admission No');?></th>
-        <th style="width:220px; padding-top:10px;"><?php echo Yii::t('courses','Name of the student');?></th>
-        <th style="width:90px; padding-top:10px;"><?php echo Yii::t('courses','Gender');?></th>
-		<th style="width:150px; padding-top:10px;"><?php echo Yii::t('courses','Date of Admission');?></th>
+        <th style="width:5px; padding-top:10px;"><?php echo Yii::t('courses','Sl no.');?></th>
+        <th style="width:30px;padding-top:10px;"><?php echo Yii::t('courses','Admn No.');?></th>
+        <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Name of the student');?></th>
+        <th style="width:40px; padding-top:10px;"><?php echo Yii::t('courses','Gender');?></th>
+    <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Parent\'s Name');?></th>
+        <th style="width:90px; padding-top:10px;"><?php echo Yii::t('courses','Mobile Phone');?></th>
         
     </tr>
 <?php 
-	
+    
 
-	 $list=Students::model()->findAll('batch_id=:x',array(':x'=>$_REQUEST['id']));
+     $list=Students::model()->findAll('batch_id=:x',array(':x'=>$_REQUEST['id']));
 
 
-	$k = 1;	
-	foreach($list as $student)
-	{
-		
-		if($student==NULL || $student->is_active == 0 || $student->is_deleted==1)
-		{
-			continue;
-		}
-		echo "<tr>";
-			echo "<td>".$k."</td>";
-			echo "<td>".$student->admission_no."</td>";
-			echo "<td style='padding-left:20px'>".$student->first_name.' '.$student->last_name."</td>";
-			$gender=$student->gender;
-			if ($gender==""){
-				$gender="-";
-			}
-			echo "<td>".$gender."</td>";
-			$doj = strtotime($student->created_at);
-			$doj1= date("d-m-Y",$doj);
-			echo "<td>".$doj1."</td>";	
-		echo "</tr>";
+    $k = 1; 
+    foreach($list as $student)
+    {
+        
+        if($student==NULL || $student->is_active == 0 || $student->is_deleted==1)
+        {
+            continue;
+        }
+        echo "<tr>";
+            echo "<td>".$k."</td>";
+            echo "<td>".$student->admission_no."</td>";
+            echo "<td style='padding-left:20px'>".$student->first_name.' '.$student->last_name."</td>";
+            $gender=$student->gender;
+            if ($gender==""){
+                $gender="-";
+            }
+            echo "<td>".$gender."</td>";
+            $guardian=Guardians::model()->findAll("id=:x", array(':x'=>$student->parent_id));
+            
+                                echo "<td>";
+                                    
+                                        if($guardian &&$guardian[0]->first_name&& $guardian[0]->first_name!=""){
+                                            echo $guardian[0]->first_name;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    
+                                echo "</td>";
+                                echo "<td>";
+                                    
+                                        if($guardian &&$guardian[0]->mobile_phone && $guardian[0]->mobile_phone!=""){
+                                            echo $guardian[0]->mobile_phone;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    
+                                echo "</td>";  
+        echo "</tr>";
 
-	 $k++;
-	 }	
-	 ?>
+     $k++;
+     }  
+     ?>
 </table>
 <!--Students List Table End -->
 <?php /*$j++;*/ }?>
