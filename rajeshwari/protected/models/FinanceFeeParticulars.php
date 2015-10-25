@@ -49,7 +49,7 @@ class FinanceFeeParticulars extends CActiveRecord
 			array('amount', 'length', 'max'=>15),
 			array('description, created_at, updated_at', 'safe'),
 			array('name, amount','required'),
-			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ ]+$/','message'=>"{attribute} should contain only letters."),
+			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_0-9 ]+$/','message'=>"{attribute} should be alphanumeric."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, description, amount, finance_fee_category_id, student_category_id, admission_no, student_id, is_deleted, created_at, updated_at', 'safe', 'on'=>'search'),

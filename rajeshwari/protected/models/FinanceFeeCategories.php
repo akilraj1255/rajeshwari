@@ -44,7 +44,7 @@ class FinanceFeeCategories extends CActiveRecord
 			array('name', 'length', 'max'=>25),
 			array('name','required'),
 			array('description, created_at, updated_at', 'safe'),
-			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ ]+$/','message'=>"{attribute} should contain only letters."),
+			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_0-9 ]+$/','message'=>"{attribute} should be alpha numeric."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, description, batch_id, is_deleted, is_master, created_at, updated_at', 'safe', 'on'=>'search'),
