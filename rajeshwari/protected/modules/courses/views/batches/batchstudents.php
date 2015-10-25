@@ -83,6 +83,11 @@ Yii::app()->clientScript->registerScript(
                 if(isset($_REQUEST['id']))
                 {
                 $posts=Students::model()->findAll("batch_id=:x and is_deleted=:y and is_active=:z", array(':x'=>$_REQUEST['id'],':y'=>'0',':z'=>'1'));
+                $student_category_list=Yii::app()->db->createCommand('select id,name from student_categories')->queryAll();
+                $categ=array();
+                foreach ($student_category_list as $stu_cat) {
+                    $categ[$stu_cat["id"]]=$stu_cat["name"];
+                }
 				if($posts!=NULL)
 				{
                 ?>
@@ -91,6 +96,7 @@ Yii::app()->clientScript->registerScript(
                     <td ><?php echo Yii::t('Batch','Sl no.');?></td>
                     <td ><?php echo Yii::t('Batch','Student Name');?></td>
                     <td ><?php echo Yii::t('Batch','Admission Number');?></td>
+                    <td ><?php echo Yii::t('Batch','Category');?></td>
                     <td ><?php echo Yii::t('Batch','Gender');?></td>
                     <td ><?php echo Yii::t('Batch','Parent/Guardian Name');?></td>
                     <td ><?php echo Yii::t('Batch','Contact');?></td>
@@ -105,7 +111,8 @@ Yii::app()->clientScript->registerScript(
 								echo '<tr>';
 								echo '<td>'.$i.'</td>';	
                                 echo '<td>'.CHtml::link(ucfirst($posts_1->first_name).' '.ucfirst($posts_1->middle_name).' '.ucfirst($posts_1->last_name), array('/students/students/view', 'id'=>$posts_1->id)).'</td>';
-								echo '<td>'.$posts_1->admission_no.'</td>';?>
+								echo '<td>'.$posts_1->admission_no.'</td>';
+                                echo '<td>'.$categ[$posts_1->student_category_id].'</td>';?>
 								<td><?php
 								  if($posts_1->gender=='M')
 								  {

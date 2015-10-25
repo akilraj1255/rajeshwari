@@ -86,11 +86,12 @@ $this->breadcrumbs=array(
     <!-- Students List Table -->
 <table width="100%" cellspacing="0" class="unpaid_table">
     <tr style="background:#E1EAEF; text-align:center; line-height:10px;">
-        <th style="width:40px; padding-top:10px;"><?php echo Yii::t('courses','Sl no.');?></th>
-        <th style="padding-top:10px;"><?php echo Yii::t('courses','Admission No');?></th>
-        <th style="width:220px; padding-top:10px;"><?php echo Yii::t('courses','Name of the student');?></th>
-        <th style="width:90px; padding-top:10px;"><?php echo Yii::t('courses','Gender');?></th>
-		<th style="width:150px; padding-top:10px;"><?php echo Yii::t('courses','Date of Admission');?></th>
+        <th style="width:5px; padding-top:10px;"><?php echo Yii::t('courses','Sl no.');?></th>
+        <th style="width:30px;padding-top:10px;"><?php echo Yii::t('courses','Admn No.');?></th>
+        <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Name of the student');?></th>
+        <th style="width:40px; padding-top:10px;"><?php echo Yii::t('courses','Gender');?></th>
+        <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Parent\'s Name');?></th>
+        <th style="width:90px; padding-top:10px;"><?php echo Yii::t('courses','Mobile Phone');?></th>
         
     </tr>
 <?php 
@@ -116,9 +117,28 @@ $this->breadcrumbs=array(
 				$gender="-";
 			}
 			echo "<td>".$gender."</td>";
-			$doj = strtotime($student->created_at);
-			$doj1= date("d-m-Y",$doj);
-			echo "<td>".$doj1."</td>";	
+			$guardian=Guardians::model()->findAll("id=:x", array(':x'=>$student->parent_id));
+            
+                                echo "<td>";
+                                    
+                                        if($guardian &&$guardian[0]->first_name&& $guardian[0]->first_name!=""){
+                                            echo $guardian[0]->first_name;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    
+                                echo "</td>";
+                                echo "<td>";
+                                    
+                                        if($guardian &&$guardian[0]->mobile_phone && $guardian[0]->mobile_phone!=""){
+                                            echo $guardian[0]->mobile_phone;
+                                        }
+                                        else{
+                                            echo '-';
+                                        }
+                                    
+                                echo "</td>";  
 		echo "</tr>";
 
 	 $k++;
