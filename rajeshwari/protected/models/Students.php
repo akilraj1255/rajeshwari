@@ -77,7 +77,7 @@ class Students extends CActiveRecord
 		return array(
 			array('parent_id, batch_id, nationality_id, student_category_id, country_id, immediate_contact_id, is_sms_enabled, is_active, is_deleted, has_paid_fees, photo_file_size, pin_code, phone1, phone2, user_id, uid', 'numerical', 'integerOnly'=>true),
 			//array('first_name, last_name, email', 'required',),
-			array('first_name, admission_no', 'required',),
+			array('first_name, admission_no,student_category_id', 'required',),
 			array('admission_no','unique'),
 			array('email','check'),
 			array('admission_no, class_roll_no, first_name, middle_name, last_name, gender, blood_group, birth_place, language, religion, address_line1, address_line2, city, state, email, photo_file_name, photo_content_type, status_description, medium_of_instruction, caste', 'length', 'max'=>255),
@@ -142,7 +142,7 @@ class Students extends CActiveRecord
 			'blood_group' => 'Blood Group',
 			'birth_place' => 'Birth Place',
 			'nationality_id' => 'Nationality',
-			'language' => 'Language',
+			'language' => 'Mother Tongue',
 			'religion' => 'Religion',
 			'student_category_id' => 'Student Category',
 			'address_line1' => 'Address Line 1',
