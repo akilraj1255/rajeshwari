@@ -44,7 +44,7 @@ class FinanceFeeCollections extends CActiveRecord
 			array('name', 'length', 'max'=>25),
 			array('start_date, end_date, due_date', 'safe'),
 			array('fee_category_id, name, start_date, end_date, due_date','required'),
-			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ ]+$/','message'=>"{attribute} should contain only letters."),
+			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_0-9 ]+$/','message'=>"{attribute} should be alphanumeric."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, start_date, end_date, due_date, fee_category_id, batch_id, is_deleted', 'safe', 'on'=>'search'),
