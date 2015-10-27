@@ -79,6 +79,12 @@ echo '<br/><br/>';
 </div></div>
 <?php if(isset($_REQUEST['batch']) && isset($_REQUEST['course']))
 { 
+
+	$student_category_list=Yii::app()->db->createCommand('select id,name from student_categories')->queryAll();
+	$categ=array();
+	foreach ($student_category_list as $stu_cat) {
+		$categ[$stu_cat["id"]]=$stu_cat["name"];
+	}
 $collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQUEST['course']));
 //$particular = FinanceFeeParticulars::model()->findByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id));
 $particular = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));
@@ -104,6 +110,7 @@ if(count($particular)!=0)
         <tr>
          <th><strong><?php echo Yii::t('fees','Sl no.');?> </strong></th>
          <th><strong><?php echo Yii::t('fees','Student Name');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Category');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Fees');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Action');?></strong></th>
         </tr> 
@@ -116,43 +123,28 @@ if(count($particular)!=0)
          <td><?php 
 		 $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id));
 		 echo $posts->first_name; ?></td>
-         <td>
-		 	<?php
-				$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$posts->admission_no));
-				if(count($check_admission_no)>0){ // If any particular is present for this student
-					$adm_amount = 0;
-					foreach($check_admission_no as $adm_no){
-						$adm_amount = $adm_amount + $adm_no->amount;
-					}
-					echo $currency->config_value.' '.$adm_amount;	
-				}
-				else{ // If any particular is present for this student category
-					$check_student_category = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>$posts->student_category_id,'admission_no'=>''));
-					if(count($check_student_category)>0){
-						$cat_amount = 0;
-						foreach($check_student_category as $stu_cat){
-							$cat_amount = $cat_amount + $stu_cat->amount;
-						}
-						echo $currency->config_value.' '.$cat_amount;		
-					}
-					else{ //If no particular is present for this student or student category
-						$check_all = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>NULL,'admission_no'=>''));
-						if(count($check_all)>0){
-							$all_amount = 0;
-							foreach($check_all as $all){
-								$all_amount = $all_amount + $all->amount;
+		 <td>
+			 	<?php echo $categ[$posts->student_category_id]; ?>
+		</td>
+        	 <td>
+				<?php
+					
+						$check_student_category= Yii::app()->db->createCommand()->select('*')->from('finance_fee_particulars')->where('finance_fee_category_id=:finance_fee_cat_id and (student_category_id=:param1 or student_category_id is NULL)')->bindValue('finance_fee_cat_id',$collection->fee_category_id)->bindValue('param1',$posts->student_category_id)->queryAll();
+						if(count($check_student_category)>0){
+							$cat_amount = 0;
+							foreach($check_student_category as $stu_cat){
+								$cat_amount = $cat_amount + $stu_cat["amount"];
 							}
-							echo $currency->config_value.' '.$all_amount;
+							$fees = $cat_amount;
+							$balance = 	$cat_amount - $list_1->fees_paid;		
 						}
-						else{
-							echo '-'; // If no particular is found.
-						}
-					}
-				}
-				
-			 
-			?>
-         </td>
+					
+				if($fees)	
+					echo $currency->config_value.' '.$fees;
+				else
+					echo '-';				
+				?>
+			 </td>
         <td><?php echo CHtml::link('Print Receipt',array('/fees/FinanceFees/printreceipt','batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$posts->id),array('target'=>'_blank')); ?></td> 
         
         
@@ -164,7 +156,7 @@ if(count($particular)!=0)
 	   else{
 	   ?>
   		<tr>
-          <td colspan="4"><?php echo Yii::t('students','No students paid the fees.');?></td>             
+          <td colspan="5"><?php echo Yii::t('students','No students paid the fees.');?></td>             
         </tr>
         <?php 
 	   }

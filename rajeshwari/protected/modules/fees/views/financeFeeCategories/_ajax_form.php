@@ -3,8 +3,8 @@
 .errorshow{display:none !important;}
 .row_checkbox
 {
-	margin:0px;
-	padding:0px;
+  margin:0px;
+  padding:0px;
 }
 .row_checkbox input[type="checkbox"]{ width:12px; height:12px;}
 .row_checkbox br{ line-height:0px !important; height:0px !important;}
@@ -108,21 +108,21 @@
         
             <?php $data = CHtml::listData(Batches::model()->findAll("is_active=:x and is_deleted=:y", array(':x'=>1,':y'=>0)), 'id', 'Coursename');
      if (!$model->isNewRecord)
-	 {
-		 echo '<h3>'.Yii::t('fees','Batch').'</h3>';
-		 $batch=Batches::model()->findByAttributes(array('id'=>$model->batch_id));
-		 echo $batch->name;
-		 
-	 }
-	 else
-	 {
-		 echo '<h3>'.Yii::t('fees','Select Batches').'</h3>';
-		 
-		 		echo '<div style="height:auto;width:450px;overflow-y:auto;line-height:0px;">';
-				echo '<table>';
-                echo $form->checkBoxList($model,'batch_id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All')); 				echo '</table>';
-				echo '</div>'; 
-	} ?>
+   {
+     echo '<h3>'.Yii::t('fees','Batch').'</h3>';
+     $batch=Batches::model()->findByAttributes(array('id'=>$model->batch_id));
+     echo $batch->name;
+     
+   }
+   else
+   {
+     echo '<h3>'.Yii::t('fees','Select Batches').'</h3>';
+     
+        echo '<div style="height:auto;width:450px;overflow-y:auto;line-height:0px;">';
+        echo '<table>';
+                echo $form->checkBoxList($model,'batch_id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All'));        echo '</table>';
+        echo '</div>'; 
+  } ?>
         <span id="success-FinanceFeeCategories_batch_id"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -133,7 +133,7 @@
 
         <div class="row">
            <?php //echo $form->labelEx($model,'is_deleted'); ?>
-		<?php echo $form->hiddenField($model,'is_deleted'); ?>
+    <?php echo $form->hiddenField($model,'is_deleted'); ?>
         <span id="success-FinanceFeeCategories_is_deleted"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -144,7 +144,7 @@
 
         <div class="row">
            <?php //echo $form->labelEx($model,'is_master'); ?>
-		<?php echo $form->hiddenField($model,'is_master',array('value'=>1)); ?>
+    <?php echo $form->hiddenField($model,'is_master',array('value'=>1)); ?>
         <span id="success-FinanceFeeCategories_is_master"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -155,7 +155,7 @@
 
         <div class="row">
             <?php //echo $form->labelEx($model,'created_at'); ?>
-		<?php echo $form->hiddenField($model,'created_at',array('value'=>date('Y-m-d'))); ?>
+    <?php echo $form->hiddenField($model,'created_at',array('value'=>date('Y-m-d'))); ?>
         <span id="success-FinanceFeeCategories_created_at"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -166,7 +166,7 @@
 
         <div class="row">
            <?php //echo $form->labelEx($model,'updated_at'); ?>
-		<?php echo $form->hiddenField($model,'updated_at',array('value'=>date('Y-m-d'))); ?>
+    <?php echo $form->hiddenField($model,'updated_at',array('value'=>date('Y-m-d'))); ?>
         <span id="success-FinanceFeeCategories_updated_at"
               class="hid input-notification-success  success png_bg right"></span>
         <div>

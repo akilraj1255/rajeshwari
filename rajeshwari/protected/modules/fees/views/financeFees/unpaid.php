@@ -26,7 +26,7 @@ window.location= 'index.php?r=fees/financeFees/unpaid&batch='+id_1+'&collection=
     </td>
     <td valign="top">
     <div class="cont_right formWrapper">
-    <h1><?php echo Yii::t('fees','Fees Collection');?></h1>
+    <h1><?php echo Yii::t('fees','Unpaid Students');?></h1>
     <div class="formCon" style="padding:3px;">
     <div class="formConInner" style="padding:3px 10px;">
     <table width="80%" border="0" cellspacing="0" cellpadding="0">
@@ -72,7 +72,14 @@ echo '<br/><br/>';
 ?>
 
 <?php if(isset($_REQUEST['batch']) && isset($_REQUEST['collection']))
-{ 
+{ 	
+	$student_category_list=Yii::app()->db->createCommand('select id,name from student_categories')->queryAll();
+	$categ=array();
+	foreach ($student_category_list as $stu_cat) {
+		$categ[$stu_cat["id"]]=$stu_cat["name"];
+		//categ[$stu_cat->id]=$stu_cat->name;
+	}
+
 	$batch=$_REQUEST['batch'];
 
 	$student_list= Yii::app()->db->createCommand('select students.id from students where batch_id=:batch_id')->bindValue('batch_id',$batch)->queryAll();
@@ -98,8 +105,17 @@ echo '<br/><br/>';
 		foreach($list as $item){
 			 array_push($student_arr_2,$item->student_id); // Push the students present in Finance fees tables
 		}
-
+		// Delete the student who is not present in the batch and somehow got added to the finance fee // table
+		foreach($student_arr_2 as $student){
+				if (!in_array($student,$student_arr_1)){
+						$command=Yii::app()->db->createCommand('delete from finance_fees where student_id=:id and fee_collection_id=:coll_id and date is null')->bindValue('id',$student)->
+						bindValue('coll_id',$_REQUEST['collection']);
+						$command->execute();
+						
+				}
+		}
 		$missing_students = array_diff($student_arr_1,$student_arr_2);
+		
 		foreach($missing_students as $student){
 			$finance = new FinanceFees;
 			$finance->fee_collection_id = $_REQUEST['collection'];
@@ -164,6 +180,7 @@ echo '<br/><br/>';
                  <th><strong><?php echo Yii::t('fees','Sl no.');?> </strong></th>
                  <th><strong><?php echo Yii::t('fees','Admission No');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Student Name');?></strong></th>
+                 <th><strong><?php echo Yii::t('fees','Category');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Fees');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Fees Paid');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Balance');?></strong></th>
@@ -188,53 +205,43 @@ echo '<br/><br/>';
 			 ?></td>
 			 <td><?php echo $posts->first_name.' '.$posts->last_name; ?></td>
 			 <td>
+			 	<?php 
+			 		if($categ[$posts->student_category_id] && $categ[$posts->student_category_id]!=""){
+			 			echo $categ[$posts->student_category_id]; 
+			 		}
+			 		else{
+			 			echo "-"; 
+			 		}	
+			 	?>
+			 </td>
+			 <td>
 				<?php
-					$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$posts->admission_no));
-					if(count($check_admission_no)>0){ // If any particular is present for this student
-						$adm_amount = 0;
-						foreach($check_admission_no as $adm_no){
-							$adm_amount = $adm_amount + $adm_no->amount;
-						}
-						$fees = $adm_amount;
-						//echo $adm_amount.' '.$currency->config_value;
-						$balance = 	$adm_amount - $list_1->fees_paid;
-					}
-					else{ // If any particular is present for this student category
-						$check_student_category = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>$posts->student_category_id,'admission_no'=>''));
+					
+						$check_student_category= Yii::app()->db->createCommand()->select('*')->from('finance_fee_particulars')->where('finance_fee_category_id=:finance_fee_cat_id and (student_category_id=:param1 or student_category_id is NULL)')->bindValue('finance_fee_cat_id',$collection->fee_category_id)->bindValue('param1',$posts->student_category_id)->queryAll();
+						$fees=0;
 						if(count($check_student_category)>0){
+						
 							$cat_amount = 0;
 							foreach($check_student_category as $stu_cat){
-								$cat_amount = $cat_amount + $stu_cat->amount;
+								$cat_amount = $cat_amount + $stu_cat["amount"];
 							}
 							$fees = $cat_amount;
-							//echo $cat_amount.' '.$currency->config_value;
 							$balance = 	$cat_amount - $list_1->fees_paid;		
 						}
-						else{ //If no particular is present for this student or student category
-							$check_all = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'student_category_id'=>NULL,'admission_no'=>''));
-							if(count($check_all)>0){
-								$all_amount = 0;
-								foreach($check_all as $all){
-									$all_amount = $all_amount + $all->amount;
-								}
-								$fees = $all_amount;
-								//echo $all_amount.' '.$currency->config_value;
-								$balance = 	$all_amount - $list_1->fees_paid;
-							}
-							else{
-								echo '-'; // If no particular is found.
-							}
-						}
-					}
-				if($fees)	
+					
+				if($fees!=0)	
 					echo $currency->config_value.' '.$fees;
 				else
 					echo '-';				
 				?>
 			 </td>
+
              <td>
              	<?php
-				if($list_1->is_paid == 0)
+             			if($fees==0){
+             				echo "-";
+             			}
+				elseif($list_1->is_paid == 0)
 			 	{
 					echo $currency->config_value.' '.$list_1->fees_paid;
 				}
@@ -257,7 +264,7 @@ echo '<br/><br/>';
 					<td>
 				<?php                    	
 				}
-				if($list_1->is_paid == 0)
+				if($list_1->is_paid == 0 && $fees!=0)
 			 	{	
              		echo $currency->config_value.' '.$balance;
 				}
@@ -268,7 +275,7 @@ echo '<br/><br/>';
 				?>
              </td>
 			 <td id="req_res<?php echo $list_1->id;?>"><?php 
-			 if($list_1->is_paid == 0)
+			 if($list_1->is_paid == 0 && $fees!=0)
 			 {
 			 	echo CHtml::ajaxLink(Yii::t('fees','Full'), Yii::app()->createUrl('fees/FinanceFees/Payfees' ), array('type' =>'GET','data' =>array( 'val1' => $list_1->id,'fees'=> $fees ),'dataType' => 'text',  'update' =>'#req_res'.$list_1->id,'success'=>'js: function(data) {window.location.reload();}'),array( 'confirm'=>'Are You Sure?'));
 				echo ' | ';
@@ -285,7 +292,7 @@ echo '<br/><br/>';
 			 }
 			 else
 			 {
-			 	echo Yii::t('fees','Paid');
+			 	echo Yii::t('fees','-');
 				//echo ' | ';
 				//echo CHtml::ajaxLink(Yii::t('fees','Edit'), Yii::app()->createUrl('fees/FinanceFees/Editfees' ), array('type' =>'GET','data' =>array( 'id' => $list_1->id ),'dataType' => 'text',  'update' =>'#edit'.$list_1->id, 'onclick'=>'$("#editfees'.$list_1->id.'").dialog("open"); return false;',));
 					//echo '<div  id="edit'.$list_1->id.'"></div>';

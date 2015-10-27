@@ -193,6 +193,7 @@ public function   init() {
 		             }else
                      echo json_encode(array('success'=>false));
                 }
+                exit;
 
 }
 
