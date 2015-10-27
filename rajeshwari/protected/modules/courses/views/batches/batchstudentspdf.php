@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 .unpaid_table{
     border-top:1px #CCC solid;
     margin:30px 0px;
-    font-size:10px;
+    font-size:15px;
     border-right:1px #CCC solid;
 }
 .unpaid_table td,th{
@@ -90,7 +90,7 @@ $this->breadcrumbs=array(
         <th style="width:30px;padding-top:10px;"><?php echo Yii::t('courses','Admn No.');?></th>
         <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Name of the student');?></th>
         <th style="width:40px; padding-top:10px;"><?php echo Yii::t('courses','Gender');?></th>
-    <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Parent\'s Name');?></th>
+        <th style="width:200px; padding-top:10px;"><?php echo Yii::t('courses','Parent\'s Name');?></th>
         <th style="width:90px; padding-top:10px;"><?php echo Yii::t('courses','Mobile Phone');?></th>
         
     </tr>
