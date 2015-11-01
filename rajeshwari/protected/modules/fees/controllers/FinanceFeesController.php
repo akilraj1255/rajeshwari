@@ -201,7 +201,7 @@ class FinanceFeesController extends RController
 		}
 		
 		# HTML2PDF has very similar syntax
-				  file_put_contents("list.txt", $batch_id);
+				  
         $html2pdf = Yii::app()->ePdf->HTML2PDF();
         $receipt_type = "student_copy";
         $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('transaction_id'=>$_REQUEST['id'],'batch_id'=>$batch_id,'collection_id'=>$collection_id,'student_id'=>$student_id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
