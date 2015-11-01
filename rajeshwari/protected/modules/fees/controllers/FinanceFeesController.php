@@ -176,13 +176,39 @@ class FinanceFeesController extends RController
 
 		public function actionPartialreceipt()
 	{
-		$student = Students::model()->findByAttributes(array('id'=>$_REQUEST['id']));
-		$student = $student->first_name.' '.$student->last_name.' Fees Receipt.pdf';
-		
-				  
-        $html2pdf = Yii::app()->ePdf->HTML2PDF();
+		$list  = FinanceTransaction::model()->findByAttributes(array('id'=>$_REQUEST['id']));
+		$collection_id = $list->collection_id;
+		$student_id = $list->student_id;
+		$collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$collection_id));
 
-        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('id'=>$_REQUEST['id'],'batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$posts->id,'receipt_no'=>$receipt_no), true));
+		$student = Students::model()->findByAttributes(array('id'=>$student_id));
+		$student = $student->first_name.' '.$student->last_name.' Fees Receipt.pdf';
+		$batch_id = $collection->batch_id;
+		//saving receipt details
+		$receipt = FeeReceipt::model()->findByAttributes(array('student'=>$student_id,'batch'=>$batch_id,'collection'=>$collection_id));
+		if($receipt==NULL){
+			$newReceipt	=	new FeeReceipt;
+			$newReceipt->student	=	$student_id;
+			$newReceipt->batch		=	$batch_id;
+			$newReceipt->collection	=	$collection_id;
+			if($newReceipt->validate()){
+				$newReceipt->save();
+				$receipt_no	=	$newReceipt->id;
+			}
+		}
+		else{
+			$receipt_no	=	$receipt->id;
+		}
+		
+		# HTML2PDF has very similar syntax
+				  file_put_contents("list.txt", $batch_id);
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $receipt_type = "student_copy";
+        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('transaction_id'=>$_REQUEST['id'],'batch_id'=>$batch_id,'collection_id'=>$collection_id,'student_id'=>$student_id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
+
+        $html2pdf->WriteHTML("<br/><br/><br/><br/><br/>");
+        $receipt_type = "office_copy";
+        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('transaction_id'=>$_REQUEST['id'],'batch_id'=>$batch_id,'collection_id'=>$collection_id,'student_id'=>$student_id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
         $html2pdf->Output($student);
 		//$this->render('printreceipt');
 	}

@@ -140,6 +140,7 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
          <th><strong><?php echo Yii::t('fees','Batch');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Amount');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Date');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Receipt');?></strong></th>
         </tr>
         <tr>
         <?php 
@@ -158,6 +159,7 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
                 echo '<td>'. $batch_name. '</td>';
                 echo '<td>'. $list_item['amount']. '</td>';
                 echo '<td>'. $list_item['transaction_date']. '</td>';
+                echo '<td><a href="index.php?r=fees/FinanceFees/partialreceipt&id='.$list_item['id'].'" target="_blank">Print</a></td>';
 
                
                 ?>
@@ -197,25 +199,36 @@ echo CHtml::submitButton( 'Search',array('name'=>'search','class'=>'formbut', 'o
         <tr>
          <th><strong><?php echo Yii::t('fees','ID.');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Admission No.');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Batch');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Amount');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Date');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Receipt');?></strong></th>
         </tr>
         <tr>
         <?php 
         $i = 1;
             foreach($list as $list_item) { 
-
+                $student = Students::model()->findByAttributes(array('id'=>$list_item['student_id']));
+                $batch = Batches::model()->findByAttributes(array('id'=>$student['batch_id']));
+                if($batch!=NULL)
+                {
+                    $batch_name = $batch->name;
+                } else {
+                    $batch_name = "-";
+                }
                 echo '<td>'. $list_item['id']. '</td>';
-                echo '<td>'. $list_item['student_id']. '</td>';
+                echo '<td>'. $student['admission_no']. '</td>';
+                echo '<td>'. $batch_name. '</td>';
                 echo '<td>'. $list_item['amount']. '</td>';
                 echo '<td>'. $list_item['transaction_date']. '</td>';
+                echo '<td><a href="index.php?r=fees/FinanceFees/partialreceipt&id='.$list_item['id'].'" target="_blank">Print</a></td>';
 
                
                 ?>
         
        
         </tr>
-       <?php } ?>
+      <?php } ?>
         </table> <br />
         
       
