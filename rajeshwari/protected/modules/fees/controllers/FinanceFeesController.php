@@ -244,6 +244,12 @@ class FinanceFeesController extends RController
 							}
 			SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
 		}
+
+		if(defined('EMAIL_ALERT_ADDRESS'))
+		{
+			UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("Student paid fees : {student_name}",array('{student_name}'=>$student->first_name.' '.$student->last_name)),UserModule::t("Student has paid fees: {student_name} of Rs. {fee_amount}",array('{student_name}'=>$old_model->firstname." ".$old_model->lastname, 'fee_amount'=>$_GET['fees'] - $fees_initial)));
+		}
+
 		$transaction  = new FinanceTransaction;
 				$transaction->amount = $_GET['fees'] - $fees_initial;
 				$transaction->collection_id = $list->fee_collection_id;
@@ -344,7 +350,10 @@ class FinanceFeesController extends RController
 							}
 				$balance = ($fees-$fees_paid)>0?($fees-$fees_paid):0;
 				SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$fees_paid,$balance )		;
-
+				if(defined('EMAIL_ALERT_ADDRESS'))
+				{
+					UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("Student paid fees : {student_name}",array('{student_name}'=>$student->first_name.' '.$student->last_name)),UserModule::t("Student has paid fees: {student_name} of Rs. {fee_amount}",array('{student_name}'=>$old_model->firstname." ".$old_model->lastname, 'fee_amount'=>$fees_paid)));
+				}
 			}
 				echo CJSON::encode(array(
 						'status'=>'success',
