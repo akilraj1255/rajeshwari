@@ -203,6 +203,12 @@ class StudentsController extends RController
 					  }
 				  }
 				
+				if(defined('EMAIL_ALERT_ADDRESS'))
+				{
+					$name = $model->first_name. " ". $model->last_name;
+					UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("New student admitted : {student_name}",array('{student_name}'=>$name)),UserModule::t("A new student has been admitted: {student_name}",array('{student_name}'=>$name)));
+				}
+
 				$this->redirect(array('guardians/create','id'=>$model->id));
 			}
 		}
@@ -310,6 +316,13 @@ class StudentsController extends RController
 					}
 				}	
 				//END saving to activity feed		
+
+				if(defined('EMAIL_ALERT_ADDRESS'))
+				{
+					$name = $model->first_name. " ". $model->last_name;
+					UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("Student details modified : {student_name}",array('{student_name}'=>$name)),UserModule::t("Student details has been modified for : {student_name}",array('{student_name}'=>$name)));
+				}
+
 				$this->redirect(array('view','id'=>$model->id));
 			}
 		}

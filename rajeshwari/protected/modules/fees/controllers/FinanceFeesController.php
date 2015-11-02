@@ -176,13 +176,39 @@ class FinanceFeesController extends RController
 
 		public function actionPartialreceipt()
 	{
-		$student = Students::model()->findByAttributes(array('id'=>$_REQUEST['id']));
+		$list  = FinanceTransaction::model()->findByAttributes(array('id'=>$_REQUEST['id']));
+		$collection_id = $list->collection_id;
+		$student_id = $list->student_id;
+		$collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$collection_id));
+
+		$student = Students::model()->findByAttributes(array('id'=>$student_id));
 		$student = $student->first_name.' '.$student->last_name.' Fees Receipt.pdf';
+		$batch_id = $collection->batch_id;
+		//saving receipt details
+		$receipt = FeeReceipt::model()->findByAttributes(array('student'=>$student_id,'batch'=>$batch_id,'collection'=>$collection_id));
+		if($receipt==NULL){
+			$newReceipt	=	new FeeReceipt;
+			$newReceipt->student	=	$student_id;
+			$newReceipt->batch		=	$batch_id;
+			$newReceipt->collection	=	$collection_id;
+			if($newReceipt->validate()){
+				$newReceipt->save();
+				$receipt_no	=	$newReceipt->id;
+			}
+		}
+		else{
+			$receipt_no	=	$receipt->id;
+		}
 		
+		# HTML2PDF has very similar syntax
 				  
         $html2pdf = Yii::app()->ePdf->HTML2PDF();
+        $receipt_type = "student_copy";
+        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('transaction_id'=>$_REQUEST['id'],'batch_id'=>$batch_id,'collection_id'=>$collection_id,'student_id'=>$student_id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
 
-        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('id'=>$_REQUEST['id'],'batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$posts->id,'receipt_no'=>$receipt_no), true));
+        $html2pdf->WriteHTML("<br/><br/><br/><br/><br/>");
+        $receipt_type = "office_copy";
+        $html2pdf->WriteHTML($this->renderPartial('partialreceipt', array('transaction_id'=>$_REQUEST['id'],'batch_id'=>$batch_id,'collection_id'=>$collection_id,'student_id'=>$student_id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
         $html2pdf->Output($student);
 		//$this->render('printreceipt');
 	}
@@ -218,6 +244,12 @@ class FinanceFeesController extends RController
 							}
 			SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$_GET['fees'] - $fees_initial,0 )		;
 		}
+
+		if(defined('EMAIL_ALERT_ADDRESS'))
+		{
+			UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("Student paid fees : {student_name}",array('{student_name}'=>$student->first_name.' '.$student->last_name)),UserModule::t("Student has paid fees: {student_name} of Rs. {fee_amount}",array('{student_name}'=>$old_model->firstname." ".$old_model->lastname, 'fee_amount'=>$_GET['fees'] - $fees_initial)));
+		}
+
 		$transaction  = new FinanceTransaction;
 				$transaction->amount = $_GET['fees'] - $fees_initial;
 				$transaction->collection_id = $list->fee_collection_id;
@@ -318,7 +350,10 @@ class FinanceFeesController extends RController
 							}
 				$balance = ($fees-$fees_paid)>0?($fees-$fees_paid):0;
 				SmsSettings::model()->sendSmsFees($to,$student->first_name.' '.$student->last_name,$fees_paid,$balance )		;
-
+				if(defined('EMAIL_ALERT_ADDRESS'))
+				{
+					UserModule::sendMail(constant('EMAIL_ALERT_ADDRESS') ,UserModule::t("Student paid fees : {student_name}",array('{student_name}'=>$student->first_name.' '.$student->last_name)),UserModule::t("Student has paid fees: {student_name} of Rs. {fee_amount}",array('{student_name}'=>$old_model->firstname." ".$old_model->lastname, 'fee_amount'=>$fees_paid)));
+				}
 			}
 				echo CJSON::encode(array(
 						'status'=>'success',
