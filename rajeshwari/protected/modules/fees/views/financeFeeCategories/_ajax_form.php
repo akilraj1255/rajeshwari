@@ -119,9 +119,9 @@
 		 echo '<h3>'.Yii::t('fees','Select Batches').'</h3>';
 		 
 		 		echo '<div style="height:auto;width:450px;overflow-y:auto;line-height:0px;">';
-				echo '<table>';
-                echo $form->checkBoxList($model,'batch_id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All')); 				echo '</table>';
-				echo '</div>'; 
+        echo '<table>';
+                echo $form->checkBoxList($model,'batch_id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All'));        echo '</table>';
+        echo '</div>'; 
 	} ?>
         <span id="success-FinanceFeeCategories_batch_id"
               class="hid input-notification-success  success png_bg right"></span>
@@ -196,6 +196,7 @@
 
     $(".close").click(
             function () {
+                alert("click pressed!");
                 $(this).parent().fadeTo(400, 0, function () { // Links with the class "close" will close parent
                     $(this).slideUp(600);
                 });

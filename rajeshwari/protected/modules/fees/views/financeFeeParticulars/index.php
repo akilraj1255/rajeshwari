@@ -91,11 +91,7 @@ $del_title=Yii::t('admin_finance-fee-particulars', 'Delete Confirmation');
 			'type'=>'raw',
 			'value' => array($model,'getcategory'),
 		),
-		array(
-			'name' => 'admission_no',
-			'type'=>'raw',
-			'value' => '"$data->admission_no" ? "$data->admission_no" : "-"',
-		),
+		
 		/*'student_id',
 		'is_deleted',
 		'created_at',

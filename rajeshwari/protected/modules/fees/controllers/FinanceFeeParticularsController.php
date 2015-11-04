@@ -189,6 +189,7 @@ public function   init() {
            $model=$this->loadModel($_POST['update_id']);
 			$model->attributes=$_POST['FinanceFeeParticulars'];
 			$model->amount=str_replace(",","",$model->amount);
+			
 			if( $model->save(false)){
 				$finance_fee_collections = FinanceFeeCollections::model()->findAll(array('condition'=>'fee_category_id = :id','params'=>array(':id'=>$model->finance_fee_category_id)));
 			            		foreach ($finance_fee_collections as $finance_fee_collection) {
@@ -212,12 +213,18 @@ public function   init() {
 
                if(isset($_POST['FinanceFeeParticulars']))
 		{
-                       $model=new FinanceFeeParticulars;
-                      //set the submitted values
-                        $model->attributes=$_POST['FinanceFeeParticulars'];
-						$model->amount=str_replace(",","",$model->amount);
+                      
                        //return the JSON result to provide feedback.
-			            if($model->save(false)){
+				$list = $_POST['FinanceFeeParticulars'];
+				$count = sizeof($list['id']);
+				for($i=0;$i<$count;$i++)
+				{
+					 $model=new FinanceFeeParticulars;
+			                      //set the submitted values
+			                        $model->attributes=$_POST['FinanceFeeParticulars'];
+			                        $model->student_category_id = $list['id'][$i] ;
+						$model->amount=str_replace(",","",$model->amount);
+			        	    if($model->save(false)){
 			            		$finance_fee_collections = FinanceFeeCollections::model()->findAll(array('condition'=>'fee_category_id = :id','params'=>array(':id'=>$model->finance_fee_category_id)));
 			            		foreach ($finance_fee_collections as $finance_fee_collection) {
 			            			$finance_fees = FinanceFees::model()->findAll(array('condition'=>'fee_collection_id = :id','params'=>array(':id'=>$finance_fee_collection->id))) ;
@@ -227,13 +234,11 @@ public function   init() {
 			            				$finance_fee->save(false);
 			            			}
 			            		}
+			            	}
+			        }
                                 echo json_encode(array('success'=>true,'id'=>$model->primaryKey) );
                                 exit;
-                        } else
-                        {
-                            echo json_encode(array('success'=>false));
-                            exit;
-                        }
+                         
 		}
   }
 

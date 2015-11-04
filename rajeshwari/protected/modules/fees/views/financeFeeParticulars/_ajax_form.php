@@ -8,39 +8,17 @@
  * @since 1.0
  * @ver 1.3
  -->
- <script language="javascript">
-function admission_1(){
-	$('#admission').show();
-	$('#category').hide();
-}
-
-function student_1(){
-	$('#category').show();
-	$('#admission').hide();
-}
-function all_1()
+ <style>
+.fancybox-inner{ width:auto;}
+.errorshow{display:none !important;}
+.row_checkbox
 {
-	$('#category').hide();
-	$('#admission').hide();
+  margin:0px;
+  padding:0px;
 }
-
-$(document).ready(function(){
-  if($('#stu').is(':checked')){
-	  $('#category').show();
-	  $('#admission').hide();
-  }
-  else if($('#admi').is(':checked')){
-	$('#admission').show();
-	$('#category').hide();
-  }
-  else{
-	  $('#category').hide();
-	  $('#admission').hide();
-  }
-});
-
-
-</script>
+.row_checkbox input[type="checkbox"]{ width:12px; height:12px;}
+.row_checkbox br{ line-height:0px !important; height:0px !important;}
+</style>
 <div id="finance-fee-particulars_form_con" class="client-val-form">
     <?php if ($model->isNewRecord) : ?>    <h3 id="create_header"><?php echo Yii::t('fees','Create New Fee Particulars');?></h3>
     <?php  elseif (!$model->isNewRecord):  ?>    <h3 id="update_header"><?php echo Yii::t('fees','Update');?></h3>
@@ -82,7 +60,7 @@ $(document).ready(function(){
          'action' => $actionUrl,
     // 'enableAjaxValidation'=>true,
       'enableClientValidation'=>true,
-	  
+    
      'focus'=>array($model,'name'),
      'errorMessageCssClass' => 'input-notification-error  error-simple png_bg',
      'clientOptions'=>array('validateOnSubmit'=>true,
@@ -103,7 +81,7 @@ $(document).ready(function(){
     <?php echo $form->errorSummary($model, '
     <div style="font-weight:bold">'.Yii::t('fees','Please correct these errors:').'</div>
     ', NULL, array('class' => 'errorsum notification errorshow png_bg')); ?>    <p class="note">Fields with <span class="required">*</span> are required.</p>
-	 <div class="row">
+   <div class="row">
             <?php //echo $form->labelEx($model,'finance_fee_category_id'); ?>
             <?php echo $form->hiddenField($model,'finance_fee_category_id',array('value'=>$_REQUEST['id'])); ?>
 
@@ -137,67 +115,29 @@ $(document).ready(function(){
         </div>
             <?php echo $form->error($model,'description'); ?>
     </div>
-     <div class="row">
- 
-    <?php
-		if($model->student_category_id==NULL and $model->admission_no==NULL)
-		{
-	?>
-    <input type="radio" name="all" value="all" id="all" checked="checked" onclick="all_1();"/> <?php echo Yii::t('fees','All'); ?><br />
-    <?php
-		}
-		else
-		{
-	?>
-    <input type="radio" name="all" value="all" id="all" onclick="all_1();"/> All<br />
-    <?php	
-		}
-		if($model->student_category_id==NULL and $model->admission_no!=NULL)
-		{
-	?>
-    <input type="radio" name="all" value="admission" id="admi" checked="checked" onclick="admission_1();" /><?php echo Yii::t('fees','Admission No.'); ?><br />
-    <?php
-		}
-		else{
-	?>
-    <input type="radio" name="all" value="admission" id="admi" onclick="admission_1();" /><?php echo Yii::t('fees','Admission No.'); ?><br />
-    <?php
-		}
-		if($model->student_category_id!=NULL and $model->admission_no==NULL)
-		{
-	?>
-    <input type="radio" name="all" value="student" id="stu" checked="checked" onclick="student_1();"  /><?php echo Yii::t('fees','Student Category'); ?> <br />
-    <?php
-		}
-		else
-		{
-	?>
-      <input type="radio" name="all" value="student" id="stu" onclick="student_1();"  /><?php echo Yii::t('fees','Student Category'); ?> <br />
-   <?php
-		}
-   ?>
-	
-    </div>
+   
 
-       
 
+<div class="row_checkbox" id="category" >
        
-       <div class="row" id="category" style="display:none;">
-		<?php echo $form->labelEx($model,'student_category_id'); ?>
-		<?php 
-		$data = CHtml::listData(StudentCategories::model()->findAll(), 'id', 'name');
-		echo $form->dropDownlist($model,'student_category_id',$data,array('empty'=>'Select')); ?>
-        <span id="success-FinanceFeeParticulars_student_category_id"
-              class="hid input-notification-success  success png_bg right"></span>
-        <div>
-            <small></small>
-        </div>
-            <?php echo $form->error($model,'student_category_id'); ?>
-    </div>
+<?php  if ($model->isNewRecord){  ?> 
+       
+    
+    <?php echo $form->labelEx($model,'student_category_id'); ?>
+    <?php 
+    $data = CHtml::listData(StudentCategories::model()->findAll(), 'id', 'name');
+    echo '<div style="height:auto;width:450px;overflow-y:auto;line-height:0px;">';
+        echo '<table>';
+        echo $form->checkBoxList($model,'id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All')); 
+        echo '</table>';
+        echo '</div>';  
+    ?>
+     <?php  }  ?>
+   </div>
 
        <div class="row" id="admission" style="display:none;">
-		<?php echo $form->labelEx($model,'admission_no'); ?>
-		<?php echo $form->textField($model,'admission_no',array('size'=>60,'maxlength'=>255)); ?>
+    <?php echo $form->labelEx($model,'admission_no'); ?>
+    <?php echo $form->textField($model,'admission_no',array('size'=>60,'maxlength'=>255)); ?>
         <span  id="success-FinanceFeeParticulars_admission_no"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -217,8 +157,8 @@ $(document).ready(function(){
     </div>
 
       <div class="row">
-		<?php //echo $form->labelEx($model,'student_id'); ?>
-		<?php echo $form->hiddenField($model,'student_id',array('id'=>'student')); ?>
+    <?php //echo $form->labelEx($model,'student_id'); ?>
+    <?php echo $form->hiddenField($model,'student_id',array('id'=>'student')); ?>
         <span id="success-FinanceFeeParticulars_student_id"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -229,7 +169,7 @@ $(document).ready(function(){
 
         <div class="row">
             <?php //echo $form->labelEx($model,'is_deleted'); ?>
-		<?php echo $form->hiddenField($model,'is_deleted'); ?>
+    <?php echo $form->hiddenField($model,'is_deleted'); ?>
         <span id="success-FinanceFeeParticulars_is_deleted"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
@@ -240,7 +180,7 @@ $(document).ready(function(){
 
         <div class="row">
            <?php //echo $form->labelEx($model,'created_at'); ?>
-		<?php echo $form->hiddenField($model,'created_at',array('value'=>date('Y-m-d'))); ?>
+    <?php echo $form->hiddenField($model,'created_at',array('value'=>date('Y-m-d'))); ?>
         <span id="success-FinanceFeeParticulars_created_at"
               class="hid input-notification-success  success png_bg right"></span>
         <div>
