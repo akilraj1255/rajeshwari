@@ -74,7 +74,11 @@ echo '<br/><br/>';
 <?php if(isset($_REQUEST['batch']) && isset($_REQUEST['collection']))
 { 
 	$batch=$_REQUEST['batch'];
-
+	$student_category_list=Yii::app()->db->createCommand('select id,name from student_categories')->queryAll();
+                $categ=array();
+                foreach ($student_category_list as $stu_cat) {
+                    $categ[$stu_cat["id"]]=$stu_cat["name"];
+                }
 	$student_list= Yii::app()->db->createCommand('select students.id from students where batch_id=:batch_id')->bindValue('batch_id',$batch)->queryAll();
 	$student_count = count($students_list);
 	
@@ -164,6 +168,7 @@ echo '<br/><br/>';
                  <th><strong><?php echo Yii::t('fees','Sl no.');?> </strong></th>
                  <th><strong><?php echo Yii::t('fees','Admission No');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Student Name');?></strong></th>
+                 <th><strong><?php echo Yii::t('fees','Category');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Fees');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Fees Paid');?></strong></th>
                  <th><strong><?php echo Yii::t('fees','Balance');?></strong></th>
@@ -187,6 +192,7 @@ echo '<br/><br/>';
 			 echo $posts->admission_no;
 			 ?></td>
 			 <td><?php echo $posts->first_name.' '.$posts->last_name; ?></td>
+			 <td><?php echo $categ[$posts->student_category_id];?></td>
 			 <td>
 				<?php
 					$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$posts->admission_no));

@@ -83,6 +83,11 @@ $collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQ
 //$particular = FinanceFeeParticulars::model()->findByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id));
 $particular = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));
 $currency=Configurations::model()->findByPk(5);
+$student_category_list=Yii::app()->db->createCommand('select id,name from student_categories')->queryAll();
+                $categ=array();
+                foreach ($student_category_list as $stu_cat) {
+                    $categ[$stu_cat["id"]]=$stu_cat["name"];
+                }
 
 if(count($particular)!=0)
 {
@@ -104,6 +109,7 @@ if(count($particular)!=0)
         <tr>
          <th><strong><?php echo Yii::t('fees','Sl no.');?> </strong></th>
          <th><strong><?php echo Yii::t('fees','Student Name');?></strong></th>
+         <th><strong><?php echo Yii::t('fees','Category');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Fees');?></strong></th>
          <th><strong><?php echo Yii::t('fees','Action');?></strong></th>
         </tr> 
@@ -116,6 +122,7 @@ if(count($particular)!=0)
          <td><?php 
 		 $posts=Students::model()->findByAttributes(array('id'=>$list_1->student_id));
 		 echo $posts->first_name; ?></td>
+	 <td><?php echo $categ[$posts->student_category_id];?></td>
          <td>
 		 	<?php
 				$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$posts->admission_no));
@@ -164,7 +171,7 @@ if(count($particular)!=0)
 	   else{
 	   ?>
   		<tr>
-          <td colspan="4"><?php echo Yii::t('students','No students paid the fees.');?></td>             
+          <td colspan="5"><?php echo Yii::t('students','No students paid the fees.');?></td>             
         </tr>
         <?php 
 	   }
