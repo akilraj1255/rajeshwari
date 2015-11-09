@@ -257,7 +257,7 @@ class StudentsController extends RController
             $model->photo_file_size=$file->size;
             $model->photo_data=file_get_contents($file->tempName);
       		  }
-			if($model->save())
+			if($model->save(false))
 			{
 				// Saving to activity feed
 				$results = array_diff_assoc($_POST['Students'],$old_model); // To get the fields that are modified.
