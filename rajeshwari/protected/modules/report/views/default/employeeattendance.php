@@ -81,9 +81,17 @@ $this->breadcrumbs=array(
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'student-form',
 	'enableAjaxValidation'=>false,
-)); ?>
+)); 
 
+?>
 
+<?php
+ $leave_types=EmployeeLeaveTypes::model()->findAll();
+ $leave_hash=array();
+ foreach ($leave_types as $leave) {
+ 	$leave_hash[$leave->id]=$leave->name;
+ }
+?>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
         <td width="247" valign="top">
@@ -287,6 +295,13 @@ $this->breadcrumbs=array(
                                         <td><?php echo Yii::t('report','Name');?></td>
                                         <td><?php echo Yii::t('report','Job Title');?></td>
                                         <td><?php echo Yii::t('report','Leaves');?></td>
+                                        <?php 
+	                                       
+	                                        foreach ($leave_types as $leave_type) {
+	                                        	echo "<td>".$leave_type->name."</td>";
+                                        }
+                                        ?>
+                                       
                                     </tr>
                                      <?php
 									$overall_sl = 1;
@@ -347,6 +362,29 @@ $this->breadcrumbs=array(
 											echo $emp_leave;
 											?>
                                         </td>
+                                           <?php 
+                                        foreach ($leave_types as $leave_type) {
+                                        	echo "<td>";
+                                        	$leaves = EmployeeAttendances::model()->findAllByAttributes(array('employee_id'=>$employee->id));
+											$emp_leave = 0;
+											foreach($leaves as $leave)
+											{
+												if($leave->employee_leave_type_id==$leave_type->id){
+													if($leave->is_half_day == 1)
+													{
+														$emp_leave = $emp_leave + 0.5;
+													}
+													else
+													{
+														$emp_leave++;
+													}
+												}
+											}
+											echo $emp_leave;
+											
+                                        	echo "</td>";
+                                        }
+                                        ?>
                                         <!-- End overall Attendance column -->
                                     </tr>
                                     <?php
@@ -371,11 +409,17 @@ $this->breadcrumbs=array(
                             <div class="tablebx">
                             	<table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr class="tablebx_topbg">
-                                        <td><?php echo Yii::t('report','Sl No');?></td>
-                                        <td><?php echo Yii::t('report','Emp No');?></td>
-                                        <td><?php echo Yii::t('report','Name');?></td>
-                                        <td><?php echo Yii::t('report','Job Title');?></td>
+                                        <td><?php echo Yii::t('report','Sl No.');?></td>
+                                        <td><?php echo Yii::t('report','Emp No.');?></td>
+                                        <td><?php echo Yii::t('report','Name.');?></td>
+                                        <td><?php echo Yii::t('report','Job Title.');?></td>
                                         <td><?php echo Yii::t('report','Leaves');?></td>
+                                        <?php 
+	                                       
+	                                        foreach ($leave_types as $leave_type) {
+	                                        	echo "<td>".$leave_type->name."</td>";
+                                        }
+                                        ?>
                                     </tr>
                                     <?php
 									$yearly_sl = 1;
@@ -432,6 +476,35 @@ $this->breadcrumbs=array(
 											//}
 											?>
                                         </td>
+                                        <?php 
+                                        foreach ($leave_types as $leave_type) {
+                                        	echo "<td>";
+                                        	$attendances = EmployeeAttendances::model()->findAllByAttributes(array('employee_id'=>$employee->id));
+											$required_year = $_REQUEST['year'];
+											//$joining_year = date('Y',strtotime($employee->joining_date));
+											//if($required_year >= $joining_year)
+											//{
+											$leaves = 0;
+											foreach($attendances as $attendance)
+											{
+												$attendance_year = date('Y',strtotime($attendance->attendance_date));
+												if($attendance_year == $required_year && $attendance->employee_leave_type_id==$leave_type->id)
+												{
+													if($attendance->is_half_day)
+													{
+														$leaves = $leaves + 0.5;
+													}
+													else
+													{
+														$leaves++;
+													}
+												}
+											}
+											echo $leaves;
+
+                                        	echo "</td>";
+                                        }
+                                        ?>
                                         <!-- End Yearly Attendance column -->
                                     </tr>
                                     <?php
@@ -460,6 +533,12 @@ $this->breadcrumbs=array(
                                         <td><?php echo Yii::t('report','Name');?></td>
                                         <td><?php echo Yii::t('report','Job Title');?></td>
                                         <td><?php echo Yii::t('report','Leaves');?></td>
+					<?php 
+	                                       
+	                                        foreach ($leave_types as $leave_type) {
+	                                        	echo "<td>".$leave_type->name."</td>";
+                                        }
+                                        ?>                                        
                                     </tr>
                                      <?php
 									$monthly_sl = 1;
@@ -516,6 +595,36 @@ $this->breadcrumbs=array(
 											//}
 											?>
                                         </td>
+                                            <?php 
+                                        foreach ($leave_types as $leave_type) {
+                                        	echo "<td>";
+                                        	
+											$attendances = EmployeeAttendances::model()->findAllByAttributes(array('employee_id'=>$employee->id));
+											$required_month = date('Y-m',strtotime($_REQUEST['month']));
+											//$joining_month = date('Y-m',strtotime($employee->joining_date));
+											//if($required_month >= $joining_month)
+											//{
+											$leaves = 0;
+											foreach($attendances as $attendance)
+											{
+												$attendance_month = date('Y-m',strtotime($attendance->attendance_date));
+												if($attendance_month == $required_month && $attendance->employee_leave_type_id==$leave_type->id)
+												{
+													if($attendance->is_half_day)
+													{
+														$leaves = $leaves + 0.5;
+													}
+													else
+													{
+														$leaves++;
+													}
+												}
+											}
+											echo $leaves;
+											
+                                        	echo "</td>";
+                                        }
+                                        ?>
                                         <!-- End Monthly Attendance column -->
                                     </tr>
                                     <?php
@@ -653,8 +762,10 @@ $this->breadcrumbs=array(
                                         <tr class="tablebx_topbg">
                                             <td><?php echo Yii::t('report','Sl No');?></td>
                                             <td><?php echo Yii::t('report','Leave Date');?></td>
+                                            <td><?php echo Yii::t('report','Leave Type');?></td>
                                             <td><?php echo Yii::t('report','Half Day');?></td>
                                             <td><?php echo Yii::t('report','Reason');?></td>
+
                                         </tr>
                                         <?php
 										if($leaves!=NULL)
@@ -676,6 +787,13 @@ $this->breadcrumbs=array(
 													echo $leave->attendance_date; 
 													?>
 												</td>
+												<td>
+                                                	<?php
+													echo $leave_hash[$leave->employee_leave_type_id];
+													?>
+                                                </td>
+
+
                                                 <td>
                                                 	<?php
 													if($leave->is_half_day == 1)
