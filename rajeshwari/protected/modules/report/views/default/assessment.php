@@ -105,7 +105,7 @@ $this->breadcrumbs=array(
 				{
                 	$subject=Subjects::model()->findByAttributes(array('id'=>$exam->subject_id));
 				?>
-                	<td style="width:auto; min-width:80px; text-align:center;"><?php if(count($list)>7){ echo @$subject->code; } else { echo @$subject->name; }?></td>
+                	<td style="width:auto; min-width:80px; text-align:center;"><?php  echo @$subject->name; ?></td>
                 <?php
 				} ?>
 				<td style="width:auto;min-width:100px;"><?php echo Yii::t('students','Total');?></td>
