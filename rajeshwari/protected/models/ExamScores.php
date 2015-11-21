@@ -143,7 +143,12 @@ class ExamScores extends CActiveRecord
 	
 	public function GetGradinglevel($data,$row)
 	{
-		$grade = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$data->grading_level_id));
+                $exam_id = $data->exam_id;
+                $exam = Exams::model()->findByAttributes(array('id'=>$exam_id));
+                $exam_group_id = $exam->exam_group_id;
+                $exam_group = ExamGroups::model()->findByAttributes(array('id'=>$exam_group_id));
+                $batch_id = $exam_group->batch_id;
+		$grade = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$batch_id));
 		$i = count($grade);
 		foreach($grade as $grade1)
 		{
