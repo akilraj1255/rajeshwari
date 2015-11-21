@@ -44,7 +44,7 @@ class GradingLevels extends CActiveRecord
 			array('name', 'length', 'max'=>255),
 			array('created_at, updated_at', 'safe'),
 			array('name, min_score','required'),
-			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ ]+$/','message'=>"{attribute} should contain only letters."),
+			array('name','CRegularExpressionValidator', 'pattern'=>'/^[A-Za-z_ +-]+$/','message'=>"{attribute} should contain only letters."),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, batch_id, min_score, order, is_deleted, created_at, updated_at', 'safe', 'on'=>'search'),
