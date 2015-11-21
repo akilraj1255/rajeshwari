@@ -5199,3 +5199,4 @@ Stack trace:
 #20 C:\wamp\www\rajeshwari\rajeshwari\core\base\CApplication.php(158): CWebApplication->processRequest()
 #21 C:\wamp\www\rajeshwari\rajeshwari\index.php(51): CApplication->run()
 #22 {main} REQUEST_URI=/rajeshwari/rajeshwari/index.php
+2015/11/21 18:18:09 [warning] [application] Failed to set unsafe attribute "password" of "ConfigForm".
