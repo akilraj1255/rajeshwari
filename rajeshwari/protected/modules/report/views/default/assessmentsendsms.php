@@ -184,7 +184,7 @@ if(isset($_REQUEST['examid']))
 																		$glevel = " No Grades" ;
 																	} 
 																$message .= $subject->name.' :'. $grade_value . "\r\n";
-																$result_r .= $subject->name.' :'. $grade_value;
+																$result_r .= $subject->name.' :'. $grade_value . "  ";
 																 $total += round($score->marks);
                                     						    $total_of_max_marks+=round($exam->maximum_marks);
 
