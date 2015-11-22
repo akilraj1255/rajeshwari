@@ -298,7 +298,7 @@ if(isset($_REQUEST['id']))
 				
 				),
 				
-				/*'marks',*/
+				'marks',
 				array(
 					'header'=>'Grades',
 					'value'=>array($model,'getgradinglevel'),

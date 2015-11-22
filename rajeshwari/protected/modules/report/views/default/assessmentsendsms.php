@@ -154,12 +154,18 @@ if(isset($_REQUEST['examid']))
 														} 
 														  else if($examgroup->exam_type == 'Grades') {
 														  	$grd = 1;
+														   $grade_value = 'No Grade';
+														  	$current_max = 0;
+														  	if($score->is_failed == 1){ $result = 'FAIL';}
 														   foreach($grades as $grade)
 																{
 																	
-																 if($grade->min_score <= $score->marks)
-																	{	
-																		$grade_value =  $grade->name;
+																 if($grade->min_score <= floor(($score->marks/$exam->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
 																	}
 																	else
 																	{
@@ -168,15 +174,21 @@ if(isset($_REQUEST['examid']))
 																		continue;
 																		
 																	}
-																$message .= $subject->name.' :'. $grade_value . "\r\n";
-																$result_r .= $subject->name.' :'. $grade_value;
-																break;
+																	$grd = 1;
+																
 																
 																}
+																//echo $grade_value ;
 																if($t<=0) 
 																	{
 																		$glevel = " No Grades" ;
 																	} 
+																$message .= $subject->name.' :'. $grade_value . "\r\n";
+																$result_r .= $subject->name.' :'. $grade_value;
+																 $total += round($score->marks);
+                                    						    $total_of_max_marks+=round($exam->maximum_marks);
+
+																
 																
 																} 
 														   else if($examgroup->exam_type == 'Marks And Grades'){
@@ -239,8 +251,34 @@ if(isset($_REQUEST['examid']))
 						{
 							$result_r = "-";
 						}
-						$total=$total.'/'.$total_of_max_marks;
-						$final_message .= "$to,$student_name,$examname,$result_r,$total".PHP_EOL;
+						$total_p=$total.'/'.$total_of_max_marks;
+						if($grd == 1){
+														  	$current_max = 0;
+														  	$grade_value = 'No Grade';
+														   foreach($grades as $grade)
+																{
+																	
+																 if($grade->min_score <= floor(($total/$total_of_max_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
+																	}
+																	else
+																	{
+																		$t--;
+																		
+																		continue;
+																		
+																	}
+																}
+																$grde = $grade_value;
+																$total_p .= ' ('. $grde.')';
+						}
+						
+
+						$final_message .= "$to,$student_name,$examname,$result_r,$total_p".PHP_EOL;
 						
 						
 						
@@ -251,6 +289,7 @@ if(isset($_REQUEST['examid']))
 			
 			
 			}
+			// echo $final_message;
 			//Send sms here
 				$sms_settings = SmsSettings::model()->findAll();
 						

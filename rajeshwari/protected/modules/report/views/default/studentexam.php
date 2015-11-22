@@ -152,18 +152,22 @@ $this->breadcrumbs=array(
 														<td>
 														<?php
 														$score = ExamScores::model()->findByAttributes(array('exam_id'=>$exam->id,'student_id'=>$student));
-							 							 $grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$score->grading_level_id));
+							 							 $grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$batch->id));
 			                                             $t = count($grades);
 														 if($examgroup->exam_type == 'Marks') {  
 														 echo $score->marks; } 
 														  else if($examgroup->exam_type == 'Grades') {
 														  	
+														    	$grade_value = 'No Grade';
+														  	$current_max = 0;
 														   foreach($grades as $grade)
 																{
-																	
-																 if($grade->min_score <= $score->marks)
-																	{	
-																		$grade_value =  $grade->name;
+																 if($grade->min_score <= floor(($score->marks/$exam->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
 																	}
 																	else
 																	{
@@ -171,15 +175,16 @@ $this->breadcrumbs=array(
 																		
 																		continue;
 																		
-																	} 
-																echo $grade_value ;
-																break;
+																	}
+																	$grd = 1;
+																
 																
 																}
+																echo $grade_value ;
 																if($t<=0) 
 																	{
 																		$glevel = " No Grades" ;
-																	} 
+																	}
 																
 																} 
 														   else if($examgroup->exam_type == 'Marks And Grades'){

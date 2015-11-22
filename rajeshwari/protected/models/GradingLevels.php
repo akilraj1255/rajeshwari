@@ -71,7 +71,7 @@ class GradingLevels extends CActiveRecord
 			'id' => 'ID',
 			'name' => Yii::t('examination','Name'),
 			'batch_id' => Yii::t('examination','Batch'),
-			'min_score' => Yii::t('examination','Min Score'),
+			'min_score' => Yii::t('examination','Min Percent Score'),
 			'order' => Yii::t('examination','Order'),
 			'is_deleted' => 'Is Deleted',
 			'created_at' => 'Created At',

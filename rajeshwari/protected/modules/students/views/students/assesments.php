@@ -59,7 +59,7 @@ $this->breadcrumbs=array(
 			
 			$exm=Exams::model()->findByAttributes(array('id'=>$exams->exam_id));
 			$group=ExamGroups::model()->findByAttributes(array('id'=>$exm->exam_group_id));
-			$grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$exams->grading_level_id));
+			$grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$group->batch_id));
 			$t = count($grades);
 			$exm_name = $group->name;
 			$sub=Subjects::model()->findByAttributes(array('id'=>$exm->subject_id));
@@ -74,30 +74,37 @@ $this->breadcrumbs=array(
 			if($group->exam_type == 'Marks') {  
 				  $arr[$sub_name] [$exm_name] = $exams->marks;  } 
 				  else if($group->exam_type == 'Grades') {
-				   
-				        
-				   foreach($grades as $grade)
-						{
-							
-						 if($grade->min_score <= $exams->marks)
-							{	
-								$grade_value =  $grade->name;
-							}
-							else
-							{
-								$t--;
-								
-								continue;
-								
-							}
+				  $grade_value = 'No Grade';
+														  	$current_max = 0;
+														  	if($score->is_failed == 1){ $result = 'FAIL';}
+														   foreach($grades as $grade)
+																{
+																	
+																 if($grade->min_score <= floor(($exams->marks/$exm->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
+																	}
+																	else
+																	{
+																		$t--;
+																		
+																		continue;
+																		
+																	}
+																	$grd = 1;
+																
+																
+																}
+																//echo $grade_value ;
+																if($t<=0) 
+																	{
+																		$glevel = " No Grades" ;
+																	} 
 						$arr[$sub_name] [$exm_name] =  $grade_value ;
-						break;
-						
-						}
-						if($t<=0) 
-							{
-								$glevel = " No Grades" ;
-							} 
+
 						} 
 				   else if($group->exam_type == 'Marks And Grades'){
 					foreach($grades as $grade)

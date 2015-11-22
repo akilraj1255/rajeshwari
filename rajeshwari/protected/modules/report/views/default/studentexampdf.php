@@ -200,10 +200,38 @@ if(isset($_REQUEST['exam_group_id']))
 							<?php
 								if($score->marks!=NULL) // Calculate grade only if mark is present
 								{
-									$grade = GradingLevels::model()->findByAttributes(array('id'=>$exam->grading_level_id)); //Calculating Grade
-									if($grade->name!=NULL)
+									$grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$student->batch_id)); //Calculating Grade
+									if($grades!=NULL)
 									{
-										echo $grade->name;
+
+										$grade_value = 'No Grade';
+														  	$current_max = 0;
+														   foreach($grades as $grade)
+																{
+																 if($grade->min_score <= floor(($score->marks/$exam->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
+																	}
+																	else
+																	{
+																		$t--;
+																		
+																		continue;
+																		
+																	}
+																	$grd = 1;
+																
+																
+																}
+																echo $grade_value ;
+																if($t<=0) 
+																	{
+																		$glevel = " No Grades" ;
+																	} 
+
 									}
 									else //No grading levels for $exam
 									{

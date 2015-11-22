@@ -121,6 +121,7 @@ $this->breadcrumbs=array(
 				foreach($students as $student) // Creating row corresponding to each student.
 				{
 					$total = 0;
+					$total_max = 0;
 					$result = "PASS";
 					$grd = 0;
 				?> 
@@ -143,6 +144,7 @@ $this->breadcrumbs=array(
 						if($score->marks!=NULL or $score->remarks!=NULL)
 						{
 							$total += $score->marks;
+							$total_max += $exam->maximum_marks;
 						?>
 							<!-- Mark and Remarks Column -->
 							<table align="center" width="100%" style="border:none;width:auto; min-width:80px;">
@@ -157,13 +159,18 @@ $this->breadcrumbs=array(
 														 if($score->is_failed == 1){ $result = 'FAIL';}
 														 } 
 														  else if($examgroup->exam_type == 'Grades') {
-														  	
+														  	$grade_value = 'No Grade';
+														  	$current_max = 0;
+														  	if($score->is_failed == 1){ $result = 'FAIL';}
 														   foreach($grades as $grade)
 																{
 																	
-																 if($grade->min_score <= $score->marks)
-																	{	
-																		$grade_value =  $grade->name;
+																 if($grade->min_score <= floor(($score->marks/$exam->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
 																	}
 																	else
 																	{
@@ -173,16 +180,16 @@ $this->breadcrumbs=array(
 																		
 																	}
 																	$grd = 1;
-																echo $grade_value ;
-																break;
+																
 																
 																}
+																echo $grade_value ;
 																if($t<=0) 
 																	{
 																		$glevel = " No Grades" ;
 																	} 
 
-																	if($grade_value == 'F') {$result = 'FAIL'; }
+
 																
 																} 
 														   else if($examgroup->exam_type == 'Marks And Grades'){
@@ -233,18 +240,27 @@ $this->breadcrumbs=array(
 
 						if($grd == 1)
 						{
-							if($total <600)
-							{
-								$grde = 'A';
-							}
-							 if($total<550)
-							{
-								$grde = 'B';
-							}
-							if($total<450)
-							{
-								$grde = 'C';
-							}
+														  	$current_max = 0;
+														  	$grade_value = 'No Grade';
+														   foreach($grades as $grade)
+																{
+																	
+																 if($grade->min_score <= floor(($total/$total_max)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
+																	}
+																	else
+																	{
+																		$t--;
+																		
+																		continue;
+																		
+																	}
+																}
+																$grde = $grade_value;
 						}
 
 

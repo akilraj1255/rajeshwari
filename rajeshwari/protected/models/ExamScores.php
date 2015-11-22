@@ -148,25 +148,33 @@ class ExamScores extends CActiveRecord
                 $exam_group_id = $exam->exam_group_id;
                 $exam_group = ExamGroups::model()->findByAttributes(array('id'=>$exam_group_id));
                 $batch_id = $exam_group->batch_id;
-		$grade = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$batch_id));
+		$grades = GradingLevels::model()->findAllByAttributes(array('batch_id'=>$batch_id));
 		$i = count($grade);
-		foreach($grade as $grade1)
-		{
-
-			if($grade1->min_score<=$data->marks)
-			{
-			return  $grade1->name;
-			}
-			else
-			{
-				$i--;
-				continue;
-				
-			}
-		}
-		if($i<=0){
-			return 'No Grades';
-		}
+		
+		$grade_value = 'No Grade';
+														  	$current_max = 0;
+														   foreach($grades as $grade)
+																{
+																	
+																 if($grade->min_score <= floor(($data->marks/$exam->maximum_marks)*100) )
+																	{	if($grade->min_score > $current_max) {
+																			$grade_value =  $grade->name;
+																			$current_max = $grade->min_score;
+																		}
+																		
+																	}
+																	else
+																	{
+																		$t--;
+																		
+																		continue;
+																		
+																	}
+																
+																
+																}
+																
+		return $grade_value ;
 	}
 	
 	public function GetGradinglevelpdf($data)
