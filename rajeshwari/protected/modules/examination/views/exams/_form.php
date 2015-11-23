@@ -238,8 +238,8 @@ else
 		'start_time',
 		'end_time',
 		'maximum_marks',
-		/*
 		'minimum_marks',
+		/*
 		'grading_level_id',
 		'weightage',
 		'event_id',
