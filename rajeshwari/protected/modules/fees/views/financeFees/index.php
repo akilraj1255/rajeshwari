@@ -35,7 +35,7 @@ window.location= 'index.php?r=fees/financeFees/index&batch='+id_1+'&collection='
 
     <?php 
 
-$data = CHtml::listData(Batches::model()->findAll("is_active=:x and is_deleted=:y", array(':x'=>1,':y'=>0)),'id','coursename');
+$data = CHtml::listData(Batches::model()->findAll("is_active=:x and is_deleted=:y ORDER BY start_date DESC", array(':x'=>1,':y'=>0)),'id','coursename');
 if(isset($_REQUEST['batch']))
 {
 	$sel= $_REQUEST['batch'];

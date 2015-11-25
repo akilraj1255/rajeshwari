@@ -104,9 +104,9 @@
             <?php echo $form->error($model,'description'); ?>
     </div>
 
-        <div class="row_checkbox">
+        <div class="row_checkbox" style="overflow-y: auto;">
         
-            <?php $data = CHtml::listData(Batches::model()->findAll("is_active=:x and is_deleted=:y", array(':x'=>1,':y'=>0)), 'id', 'Coursename');
+            <?php $data = CHtml::listData(Batches::model()->findAll("is_active=:x and is_deleted=:y ORDER BY start_date DESC", array(':x'=>1,':y'=>0)), 'id', 'Coursename');
      if (!$model->isNewRecord)
 	 {
 		 echo '<h3>'.Yii::t('fees','Batch').'</h3>';
@@ -118,7 +118,7 @@
 	 {
 		 echo '<h3>'.Yii::t('fees','Select Batches').'</h3>';
 		 
-		 		echo '<div style="height:auto;width:450px;overflow-y:auto;line-height:0px;">';
+		 		echo '<div style="height:200px;width:450px;line-height:0px;">';
         echo '<table>';
                 echo $form->checkBoxList($model,'batch_id', $data,array( 'htmlOption'=>'style=clear:both','template' => '<tr><td>{input}</td><td>{label}</td></tr>','checkAll' => 'All'));        echo '</table>';
         echo '</div>'; 
