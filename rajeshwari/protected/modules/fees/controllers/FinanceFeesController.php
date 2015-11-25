@@ -161,14 +161,18 @@ class FinanceFeesController extends RController
 		}
 		
 		# HTML2PDF has very similar syntax
-				  
+
+
+
         $html2pdf = Yii::app()->ePdf->HTML2PDF();
         $receipt_type = "student_copy";
-        $html2pdf->WriteHTML($this->renderPartial('printreceipt', array('batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$posts->id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
+        $sid1 = $_REQUEST['id'];
+        $sid2 = $_REQUEST['id'];
+        $html2pdf->WriteHTML($this->renderPartial('printreceipt', array('batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$sid1,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
 
         $html2pdf->WriteHTML("<br/><br/><br/><br/><br/>");
         $receipt_type = "office_copy";
-        $html2pdf->WriteHTML($this->renderPartial('printreceipt', array('batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$posts->id,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
+        $html2pdf->WriteHTML($this->renderPartial('printreceipt', array('batch'=>$_REQUEST['batch'],'collection'=>$_REQUEST['course'],'id'=>$sid2,'receipt_no'=>$receipt_no, 'receipt_type'=>$receipt_type), true));
         $html2pdf->Output($student);
 		//$this->render('printreceipt');
 	}

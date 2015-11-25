@@ -294,11 +294,11 @@ if(isset($_REQUEST['id']))
 				
 				),
 				
-				/*'marks',*/
+				'marks',
 				array(
 					'header'=>'Grades',
 					'value'=>array($model,'getgradinglevel'),
-					'name'=> 'grading_level_id',
+					'name'=> 1,
 				),
 				'remarks',
 				//'is_failed',
@@ -365,7 +365,7 @@ if(isset($_REQUEST['id']))
 				array(
 					'header'=>'Grades',
 					'value'=>array($model,'getgradinglevel'),
-					'name'=> 'grading_level_id',
+					'name'=> $_REQUEST['id'],
 				),
 				'remarks',
 				//'is_failed',

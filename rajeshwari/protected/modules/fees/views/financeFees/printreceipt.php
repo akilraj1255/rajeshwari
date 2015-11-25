@@ -33,7 +33,7 @@
 }
 </style>
 <?php
-    $student=Students::model()->findByAttributes(array('id'=>$_REQUEST['id']));
+    $student=Students::model()->findByAttributes(array('id'=>$id));
     $collection = FinanceFeeCollections::model()->findByAttributes(array('id'=>$_REQUEST['collection']));
     $category = FinanceFeeCategories::model()->findByAttributes(array('id'=>$collection->fee_category_id));
     //$particulars = FinanceFeeParticulars::model()->findAll("finance_fee_category_id=:x", array(':x'=>$collection->fee_category_id));  
