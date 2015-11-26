@@ -1,2 +1,3 @@
 rajeshwari/protected/config/environment.php
 rajeshwari/protected/runtime/application.log
+*.log
