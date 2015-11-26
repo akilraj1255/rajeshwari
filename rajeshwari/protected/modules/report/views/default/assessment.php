@@ -28,7 +28,8 @@ $this->breadcrumbs=array(
                 <td style="width:100px;"><strong><?php echo Yii::t('report','Batch');?></strong></td>
                 <td>&nbsp;</td>
                  <?php $criteria  = new CDbCriteria;
-		          $criteria ->compare('is_deleted',0); ?>
+		          $criteria ->compare('is_deleted',0);
+		          $criteria->order = 'start_date DESC'; ?>
                 <td> 
 				<?php 
 				if($batch_id!=NULL)
