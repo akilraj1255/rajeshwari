@@ -106,7 +106,6 @@ echo '<br/><br/>';
 		}
 		foreach($student_arr_2 as $student){
 				if (!in_array($student,$student_arr_1)){
-					echo("Found $student");
 						$command=Yii::app()->db->createCommand('delete from finance_fees where student_id=:id and fee_collection_id=:coll_id and date is null')->bindValue('id',$student)->bindValue('coll_id',$_REQUEST['collection']);
 						$command->execute();
 				}
@@ -203,6 +202,7 @@ echo '<br/><br/>';
 			 <td><?php echo $categ[$posts->student_category_id];?></td>
 			 <td>
 				<?php
+					$particular_present = true;
 					$check_admission_no = FinanceFeeParticulars::model()->findAllByAttributes(array('finance_fee_category_id'=>$collection->fee_category_id,'admission_no'=>$posts->admission_no));
 					if(count($check_admission_no)>0){ // If any particular is present for this student
 						$adm_amount = 0;
@@ -237,24 +237,34 @@ echo '<br/><br/>';
 							}
 							else{
 								echo '-'; // If no particular is found.
+								$particular_present=false;
 							}
 						}
 					}
-				if($fees)	
+				if($fees && $particular_present)	
 					echo $currency->config_value.' '.$fees;
-				else
-					echo '-';				
+								
 				?>
 			 </td>
              <td>
              	<?php
 				if($list_1->is_paid == 0)
 			 	{
-					echo $currency->config_value.' '.$list_1->fees_paid;
+			 		if($particular_present){
+						echo $currency->config_value.' '.$list_1->fees_paid;
+					}
+					else{
+						echo '-';
+					}
 				}
 				else
 				{
-					echo $currency->config_value.' '.$fees; 
+					if($particular_present){
+						echo $currency->config_value.' '.$fees; 
+					}
+					else{
+						echo '-';
+					}
 				}
 				?>
              </td>
@@ -271,7 +281,7 @@ echo '<br/><br/>';
 					<td>
 				<?php                    	
 				}
-				if($list_1->is_paid == 0)
+				if($list_1->is_paid == 0 && $particular_present)
 			 	{	
              		echo $currency->config_value.' '.$balance;
 				}
@@ -282,7 +292,7 @@ echo '<br/><br/>';
 				?>
              </td>
 			 <td id="req_res<?php echo $list_1->id;?>"><?php 
-			 if($list_1->is_paid == 0)
+			 if($list_1->is_paid == 0 && $particular_present)
 			 {
 			 	echo CHtml::ajaxLink(Yii::t('fees','Full'), Yii::app()->createUrl('fees/FinanceFees/Payfees' ), array('type' =>'GET','data' =>array( 'val1' => $list_1->id,'fees'=> $fees ),'dataType' => 'text',  'update' =>'#req_res'.$list_1->id,'success'=>'js: function(data) {window.location.reload();}'),array( 'confirm'=>'Are You Sure?'));
 				echo ' | ';
@@ -313,7 +323,13 @@ echo '<br/><br/>';
 			</tr>   
 			
 		
-		<?php $i++; } ?>
+		<?php 
+			if(!$particular_present){
+				$command=Yii::app()->db->createCommand('update finance_fees set is_paid=1 where student_id=:id and fee_collection_id=:coll_id')->bindValue('id',$list_1->student_id)->bindValue('coll_id',$_REQUEST['collection']);
+				$command->execute();
+			}
+		$i++;
+		 } ?>
 	  
 		</table>
 	</div>
